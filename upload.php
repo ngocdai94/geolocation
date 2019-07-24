@@ -130,20 +130,114 @@
           <input type="submit" value="Upload File" name="submit">
       </form> -->
 
-      <div id="floating-panel">
-        <?php 
-          for ($i = 1; $i < $size; $i++) {
-            echo "<div><span>Entity ". $i .": </span>\n";
-            echo '<input class="latlng" type="text" value=' . $col_10[$i] . ',' . $col_11[$i] . ">\n";
-            echo '<input class="submit" type="button" value="Reverse Geocode"> </div>' . "\n";
-          }
-        ?>
-        <!-- <span>Entity 1: </span>
-        <input id="latlng" type="text" value=<?php //echo $col_10[2] . ',' . $col_11[2];?>>
-        <input id="submit" type="button" value="Reverse Geocode"> -->
-      </div>
+      <main>
+        <section>
+          <form class="form-horizontal" role="form">
+              <h4>DD (decimal degrees)*</h4>
+              <div class="form-group">
+                  <label class="col-md-3 control-label" for="latitude">Latitude</label>
+                  <div class="col-md-9">
+                      <input id="latitude" class="form-control" type="text">
+                  </div>
+              </div>
+                  
+              <div class="form-group">
+                  <label class="col-md-3 control-label" for="longitude">Longitude</label>
+                  <div class="col-md-9">
+                      <input id="longitude" class="form-control" type="text">
+                  </div>
+              </div>
 
-      <div id="map"></div>
+              <div class="form-group">
+                  <div class="col-md-4">
+                    <button type="button" class="btn btn-primary" onclick="codeLatLng(1)">Get Address</button>
+                  </div>
+              </div>
+  
+              <div class="form-group">
+                  <label class="col-md-3 control-label" for="longitude">Lat,Long</label>
+                  <div class="col-md-9">
+                      <input id="latlong" class="form-control selectall" type="text">
+                  </div>
+              </div>
+                  
+          </form>
+        </section>
+
+        <section>
+            <form class="form-horizontal" role="form">
+              <h4>DMS (degrees, minutes, seconds)*</h4>
+              <div class="form-group">
+                  <label class="col-md-3 control-label" for="latitude">Latitude</label>
+                  <div class="col-md-9">
+                      <label class="radio-inline">
+                        <input type="radio" name="latnordsud" value="nord" id="nord" checked="">
+                          N
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" name="latnordsud" value="sud" id="sud">    
+                          S
+                      </label>
+                  
+                      <input class="form-control sexagesimal" id="latitude_degres" type="text">
+                      <label for="latitude_degres">°</label>
+                      <input class="form-control sexagesimal" id="latitude_minutes" type="text">
+                      <label for="latitude_minutes">'</label>
+                      <input class="form-control sexagesimalsec" id="latitude_secondes" type="text">
+                      <label for="latitude_secondes">''</label>
+                  </div>
+              </div>
+          
+              <div class="form-group">
+                  <label class="col-md-3 control-label" for="longitude">Longitude</label>
+                  <div class="col-md-9">
+                      <label class="radio-inline">
+                          <input type="radio" name="lngestouest" value="est" id="est" checked="">
+                          E
+                      </label>
+                      <label class="radio-inline">
+                          <input type="radio" name="lngestouest" value="ouest" id="ouest">    
+                          W
+                      </label>
+
+                      <input class="form-control sexagesimal" id="longitude_degres" type="text">
+                      <label for="longitude_degres">°</label>
+
+
+                      <input class="form-control sexagesimal" id="longitude_minutes" type="text">
+                      <label for="longitude_minutes">'</label>
+                      <input class="form-control sexagesimalsec" id="longitude_secondes" type="text">
+                      <label for="longitude_secondes">''</label>
+                  </div>
+              </div>
+              
+              <div class="form-group">
+                  <div class="col-md-4">
+                    <button type="button" class="btn btn-primary" onclick="dmsversdd()">Get Address</button>
+                  </div>
+              </div>
+          </form>
+        </section>
+
+        <aside>
+           <div id="floating-panel">
+            <?php 
+              for ($i = 1; $i < $size; $i++) {
+                echo "<div><span>Entity ". $i .": </span>\n";
+                echo '<input class="latlng" type="text" value=' . $col_10[$i] . ',' . $col_11[$i] . ">\n";
+                echo '<input class="submit" type="button" value="Reverse Geocode"> </div>' . "\n";
+              }
+            ?>
+            <!-- <span>Entity 1: </span>
+            <input id="latlng" type="text" value=<?php //echo $col_10[2] . ',' . $col_11[2];?>>
+            <input id="submit" type="button" value="Reverse Geocode"> -->
+          </div>          
+        </aside>
+
+        <section>
+          <div id="map"></div>
+        </section>
+      </main>
       <script>
         function initMap() {
           let map = new google.maps.Map(document.getElementById('map'), {
@@ -173,7 +267,7 @@
             if (status === 'OK') {
               console.log(results);
               if (results[0]) {
-                map.setZoom(16);
+                map.setZoom(17);
                 map.setCenter(latlng);
                 let marker = new google.maps.Marker({
                   position: latlng,
@@ -192,6 +286,45 @@
       </script>
       <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdsim6obIAp8R4-uVq6H_U1GcZEUr6CxE&libraries=places&callback=initMap">
+      </script>
+
+
+      <script>
+        function codeLatLng(origin) {
+            var lat = parseFloat(document.getElementById("latitude").value) || 0;
+            var lng = parseFloat(document.getElementById("longitude").value) || 0;
+            if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+                var latlng = new google.maps.LatLng(lat, lng);
+                if (origin == 1) ddversdms();
+                map.setCenter(latlng);
+                if (marker != null) marker.setMap(null);
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: latlng
+                });
+                myReverseGeocode(lat, lng, "");
+                fromPlace = 0
+            } else alert(trans.InvalidCoordinatesShort)
+        }
+
+        function dmsversdd() {
+          var lat, lng, nordsud, estouest, latitude_degres, latitude_minutes, latitude_secondes, longitude_degres, longitude_minutes, longitude_secondes;
+          if (document.getElementById("sud").checked) nordsud = -1;
+          else nordsud = 1;
+          if (document.getElementById("ouest").checked) estouest = -1;
+          else estouest = 1;
+          latitude_degres = parseFloat(document.getElementById("latitude_degres").value) || 0;
+          latitude_minutes = parseFloat(document.getElementById("latitude_minutes").value) || 0;
+          latitude_secondes = parseFloat(document.getElementById("latitude_secondes").value) || 0;
+          longitude_degres = parseFloat(document.getElementById("longitude_degres").value) || 0;
+          longitude_minutes = parseFloat(document.getElementById("longitude_minutes").value) || 0;
+          longitude_secondes = parseFloat(document.getElementById("longitude_secondes").value) || 0;
+          lat = nordsud * (latitude_degres + latitude_minutes / 60 + latitude_secondes / 3600);
+          lng = estouest * (longitude_degres + longitude_minutes / 60 + longitude_secondes / 3600);
+          document.getElementById("latitude").value = Math.round(lat * 1e7) / 1e7;
+          document.getElementById("longitude").value = lng;
+          setTimeout(codeLatLng(2), 1e3)
+        }
       </script>
   </body>
 </html>
