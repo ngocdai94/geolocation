@@ -239,13 +239,18 @@
         </section>
       </main>
       <script>
+        let map;
+        let geocoder;
+        let infowindow;
+        let marker = null;
+
         function initMap() {
-          let map = new google.maps.Map(document.getElementById('map'), {
+          map = new google.maps.Map(document.getElementById('map'), {
             zoom: 8,
             center: {lat: 40.731, lng: -73.997}
           });
-          let geocoder = new google.maps.Geocoder;
-          let infowindow = new google.maps.InfoWindow;
+          geocoder = new google.maps.Geocoder;
+          infowindow = new google.maps.InfoWindow;
 
           // document.getElementByID('submit').addEventListener('click', function() {
           //   geocodeLatLng(geocoder, map, infowindow);
@@ -269,7 +274,7 @@
               if (results[0]) {
                 map.setZoom(17);
                 map.setCenter(latlng);
-                let marker = new google.maps.Marker({
+                marker = new google.maps.Marker({
                   position: latlng,
                   map: map
                 });
@@ -296,7 +301,10 @@
             if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
                 var latlng = new google.maps.LatLng(lat, lng);
                 if (origin == 1) ddversdms();
-                map.setCenter(latlng);
+                
+                map.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
+                map.setZoom(17);
+
                 if (marker != null) marker.setMap(null);
                 marker = new google.maps.Marker({
                     map: map,
@@ -324,6 +332,62 @@
           document.getElementById("latitude").value = Math.round(lat * 1e7) / 1e7;
           document.getElementById("longitude").value = lng;
           setTimeout(codeLatLng(2), 1e3)
+        }
+
+        function ddversdms() {
+          var lat, lng, latdeg, latmin, latsec, lngdeg, lngmin, lngsec;
+          lat = parseFloat(document.getElementById("latitude").value) || 0;
+          lng = parseFloat(document.getElementById("longitude").value) || 0;
+          if (lat >= 0) document.getElementById("nord").checked = true;
+          if (lat < 0) document.getElementById("sud").checked = true;
+          if (lng >= 0) document.getElementById("est").checked = true;
+          if (lng < 0) document.getElementById("ouest").checked = true;
+          lat = Math.abs(lat);
+          lng = Math.abs(lng);
+          latdeg = Math.floor(lat);
+          latmin = Math.floor((lat - latdeg) * 60);
+          latsec = Math.round((lat - latdeg - latmin / 60) * 1e3 * 3600) / 1e3;
+          lngdeg = Math.floor(lng);
+          lngmin = Math.floor((lng - lngdeg) * 60);
+          lngsec = Math.floor((lng - lngdeg - lngmin / 60) * 1e3 * 3600) / 1e3;
+          document.getElementById("latitude_degres").value = latdeg;
+          document.getElementById("latitude_minutes").value = latmin;
+          document.getElementById("latitude_secondes").value = latsec;
+          document.getElementById("longitude_degres").value = lngdeg;
+          document.getElementById("longitude_minutes").value = lngmin;
+          document.getElementById("longitude_secondes").value = lngsec
+        }
+
+        function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
+          latToGeocode = parseFloat(latToGeocode);
+          lngToGeocode = parseFloat(lngToGeocode);
+          // if (latToGeocode >= -90 && latToGeocode <= 90 && lngToGeocode >= -180 && lngToGeocode <= 180) {
+          //     $.ajax({
+          //         type: "GET",
+          //         url: "https://api.opencagedata.com/geocode/v1/json?q=" + latToGeocode + "+" + lngToGeocode + "&key=" + trans.OpenKey + "&no_annotations=1&language=" + trans.Locale,
+          //         dataType: "json",
+          //         success: function(data) {
+          //             if (data.status.code == 200) {
+          //                 if (data.total_results >= 1) {
+          //                     if (intro == -1) geolocAddr = data.results[0].formatted;
+          //                     updateAll(intro, data.results[0].formatted, latToGeocode, lngToGeocode)
+          //                 } else {
+          //                     if (intro == -1) geolocAddr = trans.NoResolvedAddress;
+          //                     updateAll(intro, trans.NoResolvedAddress, latToGeocode, lngToGeocode)
+          //                 }
+          //             } else {
+          //                 if (intro == -1) geolocAddr = trans.GeocodingError;
+          //                 updateAll(intro, trans.InvalidCoordinates, latToGeocode, lngToGeocode)
+          //             }
+          //         },
+          //         error: function(xhr, err) {
+          //             updateAll(trans.Geolocation, trans.InvalidCoordinates, latToGeocode, lngToGeocode)
+          //         }
+          //     }).always(function() {
+          //         if (intro == -1) initializeMap()
+          //     });
+          //     return false
+          // } else alert(trans.InvalidCoordinatesShort)
         }
       </script>
   </body>
