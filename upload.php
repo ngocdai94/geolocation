@@ -246,8 +246,8 @@
 
         function initMap() {
           map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 8,
-            center: {lat: 40.731, lng: -73.997}
+            zoom: 4,
+            center: {lat: 41.4212156, lng: -104.1831666}
           });
           geocoder = new google.maps.Geocoder;
           infowindow = new google.maps.InfoWindow;
@@ -261,7 +261,34 @@
             classSubmit[i].addEventListener('click', function() {
               geocodeLatLng(geocoder, map, infowindow, classLatLng[i].value);
             });
+
+            // mark all geolocation on the map
+            allGeolocationMarkers (geocoder, map, classLatLng[i].value);
           }
+        }
+
+        function allGeolocationMarkers (geocoder, map, input) {
+          let latlngStr = input.split(',', 2);
+          let latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+          geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === 'OK') {
+              console.log(results);
+              if (results[0]) {
+                // map.setZoom(15);
+                // map.setCenter(latlng);
+                marker = new google.maps.Marker({
+                  position: latlng,
+                  map: map
+                });
+                // infowindow.setContent(results[0].formatted_address);
+                // infowindow.open(map, marker);
+              } else {
+                window.alert('No results found');
+              }
+            } else {
+              window.alert('Geocoder failed due to: ' + status);
+            }
+          });
         }
 
         function geocodeLatLng(geocoder, map, infowindow, input) {
@@ -305,7 +332,11 @@
                 map.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
                 map.setZoom(17);
 
-                if (marker != null) marker.setMap(null);
+
+                /**
+                    Uncomment the line below to set multiple marker
+                 */
+                // if (marker != null) marker.setMap(null);
                 marker = new google.maps.Marker({
                     map: map,
                     position: latlng
