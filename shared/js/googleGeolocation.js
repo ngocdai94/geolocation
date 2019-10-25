@@ -32,12 +32,12 @@ function initMap() {
     let classSubmit = document.getElementsByClassName('submit');
     let classLatLng = document.getElementsByClassName('latlng');
     for (let i = 0; i < classSubmit.length; i++) {
-    classSubmit[i].addEventListener('click', function() {
-        geocodeLatLng(geocoder, map, infowindow, classLatLng[i].value);
-    });
+        classSubmit[i].addEventListener('click', function() {
+            geocodeLatLng(geocoder, map, infowindow, classLatLng[i].value);
+        });
 
-    // mark all geolocation on the map
-    allGeolocationMarkers (geocoder, map, classLatLng[i].value);
+        // mark all geolocation on the map
+        allGeolocationMarkers (geocoder, map, classLatLng[i].value);
     }
 }
 
@@ -75,6 +75,7 @@ function geocodeLatLng(geocoder, map, infowindow, input) {
         if (results[0]) {
         map.setZoom(17);
         map.setCenter(latlng);
+        
         marker = new google.maps.Marker({
             position: latlng,
             map: map
