@@ -75,7 +75,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Reverse Geocoding</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/shared/css/main.css">
   </head>
   <body>
       <header style="text-align:center;">
@@ -200,7 +200,7 @@
         </section>
       </main>
       
-      <script defer src="shared/js/googleGeolocation.js"></script>
+      <script defer src="/shared/js/googleGeolocation.js"></script>
       <script defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdsim6obIAp8R4-uVq6H_U1GcZEUr6CxE&libraries=places&callback=initMap">
       </script>

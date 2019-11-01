@@ -56,3 +56,15 @@ html, body {
 .map {
     clear: both;
 }
+
+/* MySQL Table */
+table {
+    border-spacing: 4px;
+}
+th, td {
+    text-align: center;
+    padding: 5px;
+}
+.grayout {
+    background-color: #999;
+}

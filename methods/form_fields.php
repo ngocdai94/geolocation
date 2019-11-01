@@ -47,12 +47,12 @@ if(!isset($geoData)) {
   <dd><input type="text" name="geoData[long_direction]" value="<?php echo h($geoData->long_direction); ?>" /></dd>
 </dl>
 
-<!-- <dl>
-  <dt>LAT (gray out)</dt>
-  <dd><input type="text" name="geoData[lat]" value="<?php //echo h($geoData->lat); ?>" /></dd>
+<dl>
+  <dt>LAT</dt>
+  <dd><input class="grayout" style="background-color:#999;" type="text" name="geoData[latitude]" disabled value="<?php echo h(number_format($geoData->latitude, 4)); ?>" /></dd>
 </dl>
 
 <dl>
-  <dt>LONG (gray out)</dt>
-  <dd><input type="text" name="geoData[lat]" value="<?php //echo h($geoData->long); ?>" /></dd>
-</dl> -->
+  <dt>LONG</dt>
+  <dd><input class="grayout" style="background-color:#999;" type="text" name="geoData[longitude]" disabled value="<?php echo h(number_format($geoData->longitude, 4)); ?>" /></dd>
+</dl>

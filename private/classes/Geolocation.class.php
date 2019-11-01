@@ -3,7 +3,7 @@
 class Geolocation extends DatabaseObject {
 
   static protected $table_name = 'geolocation_data';
-  static protected $db_columns = ['id', 'lat_degree', 'lat_minute', 'lat_seconds', 'lat_direction', 'long_degree', 'long_minute', 'long_seconds', 'long_direction'];//, 'lat', 'long'];
+  static protected $db_columns = ['id', 'lat_degree', 'lat_minute', 'lat_seconds', 'lat_direction', 'long_degree', 'long_minute', 'long_seconds', 'long_direction', 'latitude', 'longitude'];
 
   public $id;
   public $lat_degree;
@@ -14,23 +14,24 @@ class Geolocation extends DatabaseObject {
   public $long_minute;
   public $long_seconds;
   public $long_direction;
-  public $lat;
-  public $long;
+  public $latitude;
+  public $longitude;
 
-  public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];
+  // public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];
 
-  public const GENDERS = ['Mens', 'Womens', 'Unisex'];
+  // public const GENDERS = ['Mens', 'Womens', 'Unisex'];
 
-  public const CONDITION_OPTIONS = [
-    1 => 'Beat up',
-    2 => 'Decent',
-    3 => 'Good',
-    4 => 'Great',
-    5 => 'Like New'
-  ];
+  // public const CONDITION_OPTIONS = [
+  //   1 => 'Beat up',
+  //   2 => 'Decent',
+  //   3 => 'Good',
+  //   4 => 'Great',
+  //   5 => 'Like New'
+  // ];
 
   public function __construct($args=[]) {
-    //$this->brand = isset($args['brand']) ? $args['brand'] : '';
+    // EQUIVALENT SYNTAX
+    // $this->lat_degree = isset($args['lat_degree']) ? $args['lat_degree'] : '';
     $this->lat_degree = $args['lat_degree'] ?? '';
     $this->lat_minute = $args['lat_minute'] ?? '';
     $this->lat_seconds = $args['lat_seconds'] ?? '';
@@ -38,9 +39,9 @@ class Geolocation extends DatabaseObject {
     $this->long_degree = $args['long_degree'] ?? '';
     $this->long_minute = $args['long_minute'] ?? '';
     $this->long_seconds = $args['long_seconds'] ?? '';
-    $this->long_direction = $args['long_direction'] ?? 0;
-    // $this->weight_kg = $args['weight_kg'] ?? 0.0;
-    // $this->condition_id = $args['condition_id'] ?? 3;
+    $this->long_direction = $args['long_direction'] ?? '';
+    $this->latitude = $args['latitude'] ?? 'NULL';
+    $this->longitude = $args['longitude'] ?? 'NULL';
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {
@@ -50,35 +51,20 @@ class Geolocation extends DatabaseObject {
     // }
   }
 
-  public function convertLat_Long(){
-
-  }
-  public function name() {
-    return "{$this->brand} {$this->model} {$this->year}";
-  }
-  public function weight_kg() {
-    return number_format($this->weight_kg, 2) . ' kg';
+  public function convertLat(){
+    $latSign = -1;
+    if(strcmp($this->lat_direction, "N") == 0 || strcmp($this->lat_direction, "n") == 0){
+      $latSign = 1;
+    } 
+    return $this->latitude=$latSign*($this->lat_degree + $this->lat_minute/60 + $this->lat_seconds/3600);
   }
 
-  public function set_weight_kg($value) {
-    $this->weight_kg = floatval($value);
-  }
-
-  public function weight_lbs() {
-    $weight_lbs = floatval($this->weight_kg) * 2.2046226218;
-    return number_format($weight_lbs, 2) . ' lbs';
-  }
-
-  public function set_weight_lbs($value) {
-    $this->weight_kg = floatval($value) / 2.2046226218;
-  }
-
-  public function condition() {
-    if($this->condition_id > 0) {
-      return self::CONDITION_OPTIONS[$this->condition_id];
-    } else {
-      return "Unknown";
+  public function convertLong(){
+    $longSign = 1;
+    if(strcmp($this->long_direction, "W") == 0 || strcmp($this->long_direction, "w") == 0){
+      $longSign = -1;
     }
+    return $this->longitude=$longSign*($this->long_degree + $this->long_minute/60 + $this->long_seconds/3600);
   }
 
   protected function validate() {
