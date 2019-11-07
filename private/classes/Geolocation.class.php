@@ -40,8 +40,8 @@ class Geolocation extends DatabaseObject {
     $this->long_minute = $args['long_minute'] ?? '';
     $this->long_seconds = $args['long_seconds'] ?? '';
     $this->long_direction = $args['long_direction'] ?? '';
-    $this->latitude = $args['latitude'] ?? 'NULL';
-    $this->longitude = $args['longitude'] ?? 'NULL';
+    $this->latitude = $args['latitude'] ?? '0';
+    $this->longitude = $args['longitude'] ?? '0';
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {

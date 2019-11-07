@@ -201,8 +201,6 @@
       </main>
       
       <script defer src="/shared/js/googleGeolocation.js"></script>
-      <script defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdsim6obIAp8R4-uVq6H_U1GcZEUr6CxE&libraries=places&callback=initMap">
-      </script>
+      <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcHfA2WqTubyiS9ABL3Qi8y7xZkf3-s9c&libraries=places&callback=initMap"></script>
   </body>
 </html>
