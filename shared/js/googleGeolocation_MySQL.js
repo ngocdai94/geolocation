@@ -11,12 +11,21 @@
  */
 
 /**
- * GLOBAL letIABLE
+ * GLOBAL VARIABLES
  */
 let map;
 let geocoder;
 let infowindow;
+let classSubmit;
+let classLat;
+let classLong;
 let marker = null;
+
+let delay = 100;
+let totalGeocode = 0;
+let nextGeocode = 0;
+let totalMarkers = 0;
+let nextMarker = 0;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -26,43 +35,48 @@ function initMap() {
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
 
-    // document.getElementByID('submit').addEventListener('click', function() {
-    //   geocodeLatLng(geocoder, map, infowindow);
-    // });
-    let classSubmit = document.getElementsByClassName('reverseGeocode');
-    // let classLatLng = document.getElementsByClassName('latlng');
-    let classLat = document.getElementsByClassName('lat');
-    let classLong = document.getElementsByClassName('long');
-    for (let i = 0; i < classSubmit.length; i++) {
-        classSubmit[i].addEventListener('click', function() {
-            geocodeLatLng(geocoder, map, infowindow, classLat[i].innerText, classLong[i].innerText);
-        });
+    classSubmit = document.getElementsByClassName('reverseGeocode');
+    classLat = document.getElementsByClassName('lat');
+    classLong = document.getElementsByClassName('long');
 
+    totalGeocode = classSubmit.length;
+    totalMarkers = totalGeocode;
+
+    for (let i = 0; i < totalGeocode; i++) {
+        classSubmit[i].addEventListener('click', function() {
+                geocodeLatLng(geocoder, map, infowindow, classLat[i].innerText, classLong[i].innerText)
+        });
         // mark all geolocation on the map
-        //allGeolocationMarkers (geocoder, map, classLat[i].innerText, classLong[i].innerText);
+        // allGeolocationMarkers (geocoder, map, classLat[i].innerText, classLong[i].innerText);
     }
 }
 
-function allGeolocationMarkers (geocoder, map, latitude, longitude) {
+function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
+    console.log("Hello " + delay);
     let latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
     geocoder.geocode({'location': latlng}, function(results, status) {
-    if (status === 'OK') {
-        console.log(results);
-        if (results[0]) {
-        // map.setZoom(15);
-        // map.setCenter(latlng);
-        marker = new google.maps.Marker({
-            position: latlng,
-            map: map
-        });
-        // infowindow.setContent(results[0].formatted_address);
-        // infowindow.open(map, marker);
+        if (status === 'OK') {
+            console.log(results);
+            if (results[0]) {
+                // map.setZoom(15);
+                // map.setCenter(latlng);
+                marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map
+                });
+                // infowindow.setContent(results[0].formatted_address);
+                // infowindow.open(map, marker);
+            } else {
+                window.alert('No results found');
+            }
         } else {
-        window.alert('No results found');
+            // window.alert('Geocoder failed due to: ' + status);
+            if (status === 'OVER_QUERY_LIMIT') {
+                delay++;
+                console.log("Over Limit from allGeolocationMarkers " + delay + '\n');
+            }
         }
-    } else {
-        window.alert('Geocoder failed due to: ' + status);
-    }
+        next();
     });
 }
 
@@ -72,24 +86,29 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
     // let latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
     let latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
     geocoder.geocode({'location': latlng}, function(results, status) {
-    if (status === 'OK') {
-        console.log(results);
-        if (results[0]) {
-        map.setZoom(17);
-        map.setCenter(latlng);
-        
-        marker = new google.maps.Marker({
-            position: latlng,
-            map: map
-        });
-        infowindow.setContent(results[0].formatted_address);
-        infowindow.open(map, marker);
+        if (status === 'OK') {
+            console.log(results);
+            if (results[0]) {
+                map.setZoom(17);
+                map.setCenter(latlng);
+                
+                marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map
+                });
+                infowindow.setContent(results[0].formatted_address);
+                infowindow.open(map, marker);
+            } else {
+                window.alert('No results found');
+            }
         } else {
-        window.alert('No results found');
+            // window.alert('Geocoder failed due to: ' + status);
+            if (status === 'OVER_QUERY_LIMIT') {
+                delay++;
+                console.log("Over Limit from geocodeLatLng " + delay + '\n');
+            }
         }
-    } else {
-        window.alert('Geocoder failed due to: ' + status);
-    }
+        //next();
     });
 }
 
@@ -99,21 +118,20 @@ function codeLatLng(origin) {
     if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
         let latlng = new google.maps.LatLng(lat, lng);
         if (origin == 1) ddversdms();
-        
-        map.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
-        map.setZoom(17);
+            map.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
+            map.setZoom(17);
 
 
-        /**
-            Uncomment the line below to set multiple marker
-            */
-        // if (marker != null) marker.setMap(null);
-        marker = new google.maps.Marker({
-            map: map,
-            position: latlng
-        });
-        myReverseGeocode(lat, lng, "");
-        fromPlace = 0
+            /**
+                Uncomment the line below to set multiple marker
+                */
+            // if (marker != null) marker.setMap(null);
+            marker = new google.maps.Marker({
+                map: map,
+                position: latlng
+            });
+            myReverseGeocode(lat, lng, "");
+            fromPlace = 0
     } else alert(trans.InvalidCoordinatesShort)
 }
 
@@ -191,3 +209,32 @@ function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
     //     return false
     // } else alert(trans.InvalidCoordinatesShort)
 }
+
+// ======= Function to call the next Geocode operation when the reply comes back
+// function theNextGeocode() {
+//     if (nextGeocode < totalGeocode) {
+//         setTimeout(classSubmit[nextGeocode].addEventListener('click', function() {
+//                 geocodeLatLng(geocoder, map, infowindow, classLat[nextGeocode].innerText, classLong[nextGeocode].innerText, next)
+//             }), 
+//             delay);
+//         nextGeocode++;
+//     } else {
+//         // We're done. Show map bounds
+//         // map.fitBounds(bounds);
+//     }
+// }
+
+function theNextMarker() {
+    if (nextMarker < totalMarkers) {
+        console.log("Hello from the nextMarker() \n");
+        setTimeout(allGeolocationMarkers (geocoder, map, classLat[nextMarker].innerText, classLong[nextMarker].innerText, theNextMarker) , delay);
+        nextMarker++;
+    } else {
+        // We're done. Show map bounds
+    }
+}
+
+// ======= Call that function for the first time =======
+window.onload = () => {
+    theNextMarker();
+};

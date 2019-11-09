@@ -78,14 +78,16 @@ if (isset($_POST['submit'])) { //check if form was submitted
             <td class="long"><?php echo h(number_format($data->longitude, 4)); ?></td>
 
             <td><input class="reverseGeocode" type="button" value="Reverse Geocode"></td>
-            <td><a href="methods/edit.php?id=<?php echo h(u($data->id)); ?>">Edit</a></td>
-            <td><a href="methods/delete.php?id=<?php echo h(u($data->id)); ?>">Delete</a></td>
+            <!-- <td><a href="methods/edit.php?id=<?php //echo h(u($data->id)); ?>">Edit</a></td> -->
+            <!-- <td><a href="methods/delete.php?id=<?php //echo h(u($data->id)); ?>">Delete</a></td> -->
+            <td><input class="ultiliti_buttons" type="button" value="Edit" onclick="window.location.href='methods/edit.php?id=<?php echo h(u($data->id)); ?>'"></td>
+            <td><input class="ultiliti_buttons" type="button" value="Delete" onclick="window.location.href='methods/delete.php?id=<?php echo h(u($data->id)); ?>'"></td>
           </tr>
         <?php } ?>
       </table>
 
       <div class="button_wrapper">
-        <button type="button" class="ultiliti_buttons"><a href="methods/add.php">Add a New Data</a></button>
+        <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">
       </div>
     </section>
 

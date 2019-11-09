@@ -71,12 +71,12 @@ body {
 }
 
 table {
-    border-spacing: 4px;
+    border-spacing: 2px;
     margin: 0 auto;
 }
 th, td {
     text-align: center;
-    padding: 5px;
+    padding: 3px;
 }
 .grayout {
     background-color: #999;
@@ -94,7 +94,7 @@ th, td {
   
 .ultiliti_buttons {
     height: 20px;
-    width: 100px;
+    width: auto;
 }
 
 .ultiliti_buttons a {
