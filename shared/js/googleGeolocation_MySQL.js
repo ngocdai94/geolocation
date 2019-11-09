@@ -52,7 +52,6 @@ function initMap() {
 }
 
 function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
-    console.log("Hello " + delay);
     let latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
     geocoder.geocode({'location': latlng}, function(results, status) {
         if (status === 'OK') {
@@ -72,8 +71,10 @@ function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
         } else {
             // window.alert('Geocoder failed due to: ' + status);
             if (status === 'OVER_QUERY_LIMIT') {
+                nextMarker--;
                 delay++;
-                console.log("Over Limit from allGeolocationMarkers " + delay + '\n');
+            } else {
+                console.log(status + " Delay: " + delay + "ms " + '\n');
             }
         }
         next();
@@ -103,12 +104,7 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
             }
         } else {
             // window.alert('Geocoder failed due to: ' + status);
-            if (status === 'OVER_QUERY_LIMIT') {
-                delay++;
-                console.log("Over Limit from geocodeLatLng " + delay + '\n');
-            }
         }
-        //next();
     });
 }
 
@@ -226,7 +222,6 @@ function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
 
 function theNextMarker() {
     if (nextMarker < totalMarkers) {
-        console.log("Hello from the nextMarker() \n");
         setTimeout(allGeolocationMarkers (geocoder, map, classLat[nextMarker].innerText, classLong[nextMarker].innerText, theNextMarker) , delay);
         nextMarker++;
     } else {
