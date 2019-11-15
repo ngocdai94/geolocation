@@ -100,3 +100,19 @@ th, td {
 .ultiliti_buttons a {
     text-decoration: none;
 }
+
+/* Pagination */
+.pagination {
+    margin: 1em 0;
+    text-align: center;
+}
+  
+.pagination a, .pagination span {
+    display: inline-block;
+    margin: 0 5px;
+}
+  
+.pagination span.selected {
+    font-weight: bold;
+    color: #000;
+}

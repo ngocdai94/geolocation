@@ -1,7 +1,6 @@
+<?php require_once('private/initialize.php'); ?>
 <?php
 // load PHP Excel
-include('private/initialize.php');
-
 use SimpleExcel\SimpleExcel;
 
 $message = "";
@@ -9,6 +8,22 @@ if (isset($_POST['submit'])) { //check if form was submitted
   $input = $_POST['fileToUpload']; //get input text
   $message = "Success! You entered: " . $input;
 }
+
+// Initilize Pagination Variable and Get Number of Items in MySQL Database
+$current_page = $_GET['page'] ?? 1;
+$per_page = 4;
+$total_count = Geolocation::count_all();
+
+// Instantiate a pagination object
+$pagination = new Pagination($current_page, $per_page, $total_count);
+
+// Find all geolocation data by using pagination 
+// instead of $geo_data = Geolocation::find_all();
+
+$sql = "SELECT * FROM geolocation_data ";
+$sql .= "LIMIT {$per_page} ";
+$sql .= "OFFSET {$pagination->offset()}";
+$geo_data = Geolocation::find_by_sql($sql);
 ?>
 
 
@@ -49,7 +64,8 @@ if (isset($_POST['submit'])) { //check if form was submitted
         </tr>
 
         <?php
-        $geo_data = Geolocation::find_all();
+          // $geo_data = Geolocation::find_all();
+          // has been intergrated with Pagination Class and moved to the top
         ?>
 
         <?php
@@ -85,7 +101,11 @@ if (isset($_POST['submit'])) { //check if form was submitted
           </tr>
         <?php } ?>
       </table>
-
+      
+      <!-- Pagination Links -->
+      <?php 
+        echo $pagination->page_links($_SERVER['PHP_SELF']);
+      ?>
       <div class="button_wrapper">
         <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">
       </div>
