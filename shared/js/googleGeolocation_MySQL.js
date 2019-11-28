@@ -61,10 +61,17 @@ function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
                 // map.setCenter(latlng);
                 marker = new google.maps.Marker({
                     position: latlng,
+                    animation: google.maps.Animation.DROP,
+                    //title: results[0],
                     map: map
                 });
                 // infowindow.setContent(results[0].formatted_address);
                 // infowindow.open(map, marker);
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent(results[0].formatted_address);
+                    infowindow.open(marker.get('map'), marker);       
+                });
             } else {
                 window.alert('No results found');
             }
@@ -97,8 +104,10 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
                     position: latlng,
                     map: map
                 });
-                infowindow.setContent(results[0].formatted_address);
-                infowindow.open(map, marker);
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent(results[0].formatted_address);
+                    infowindow.open(marker.get('map'), marker);       
+                });
             } else {
                 window.alert('No results found');
             }

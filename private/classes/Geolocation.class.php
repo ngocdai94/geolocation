@@ -3,9 +3,10 @@
 class Geolocation extends DatabaseObject {
 
   static protected $table_name = 'geolocation_data';
-  static protected $db_columns = ['id', 'lat_degree', 'lat_minute', 'lat_seconds', 'lat_direction', 'long_degree', 'long_minute', 'long_seconds', 'long_direction', 'latitude', 'longitude'];
+  static protected $db_columns = ['id', 'name', 'lat_degree', 'lat_minute', 'lat_seconds', 'lat_direction', 'long_degree', 'long_minute', 'long_seconds', 'long_direction', 'latitude', 'longitude', 'attitude'];
 
   public $id;
+  public $name;
   public $lat_degree;
   public $lat_minute;
   public $lat_seconds;
@@ -16,6 +17,7 @@ class Geolocation extends DatabaseObject {
   public $long_direction;
   public $latitude;
   public $longitude;
+  public $attitude;
 
   // public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];
 
@@ -32,6 +34,7 @@ class Geolocation extends DatabaseObject {
   public function __construct($args=[]) {
     // EQUIVALENT SYNTAX
     // $this->lat_degree = isset($args['lat_degree']) ? $args['lat_degree'] : '';
+    $this->name = $args['name'] ?? '';
     $this->lat_degree = $args['lat_degree'] ?? '';
     $this->lat_minute = $args['lat_minute'] ?? '';
     $this->lat_seconds = $args['lat_seconds'] ?? '';
@@ -42,6 +45,7 @@ class Geolocation extends DatabaseObject {
     $this->long_direction = $args['long_direction'] ?? '';
     $this->latitude = $args['latitude'] ?? '0';
     $this->longitude = $args['longitude'] ?? '0';
+    $this->attitude = $args['attitude'] ?? '';
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {

@@ -1,29 +1,94 @@
 <?php require_once('private/initialize.php'); ?>
 <?php
-// load PHP Excel
-use SimpleExcel\SimpleExcel;
+  // load PHP Excel
+  use SimpleExcel\SimpleExcel;
 
-$message = "";
-if (isset($_POST['submit'])) { //check if form was submitted
-  $input = $_POST['fileToUpload']; //get input text
-  $message = "Success! You entered: " . $input;
-}
+  // Initilize Pagination Variable and Get Number of Items in MySQL Database
+  $current_page = $_GET['page'] ?? 1;
+  $per_page = 25;
+  $total_count = Geolocation::count_all();
 
-// Initilize Pagination Variable and Get Number of Items in MySQL Database
-$current_page = $_GET['page'] ?? 1;
-$per_page = 4;
-$total_count = Geolocation::count_all();
+  // Instantiate a pagination object
+  $pagination = new Pagination($current_page, $per_page, $total_count);
 
-// Instantiate a pagination object
-$pagination = new Pagination($current_page, $per_page, $total_count);
+  // Find all geolocation data by using pagination 
+  // instead of $geo_data = Geolocation::find_all();
+  $sql = "SELECT * FROM geolocation_data ";
+  $sql .= "LIMIT {$per_page} ";
+  $sql .= "OFFSET {$pagination->offset()}";
+  $geo_data = Geolocation::find_by_sql($sql);
 
-// Find all geolocation data by using pagination 
-// instead of $geo_data = Geolocation::find_all();
+  if (isset($_POST['upload'])) { //check if form was submitted
+    $input = $_POST['upload_file']; //get input text
+    // $message = "Success! You uploaded: " . $input;
 
-$sql = "SELECT * FROM geolocation_data ";
-$sql .= "LIMIT {$per_page} ";
-$sql .= "OFFSET {$pagination->offset()}";
-$geo_data = Geolocation::find_by_sql($sql);
+    $target_dir = "uploads/";
+    $isUpload = false;
+    $size = 0;
+    $target_file = $target_dir . basename($_FILES["upload_file"]["name"]);
+    $uploadOk = 1;
+    $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+    // Check file size
+    if ($_FILES["upload_file"]["size"] > 500000) {
+      echo "Sorry, your file is too large.";
+      $uploadOk = 0;
+    }
+    // Allow certain file formats
+    if($fileType != "xlsx" && $fileType != "csv") {
+      echo "Sorry, only XLSX and CSV files are allowed.";
+      $uploadOk = 0;
+    }
+
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+      echo "Sorry, your file was not uploaded.";
+
+    // if everything is ok, try to upload file
+    } else {
+      if (move_uploaded_file($_FILES["upload_file"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["upload_file"]["name"]). " has been uploaded.";
+        $isUpload = true;
+      } else {
+        echo "Sorry, there was an error uploading your file.";
+      }
+    }
+
+    if ($isUpload) {
+      $size = $_FILES["upload_file"]["size"];
+    
+      // erase content in database
+      $deleteAllRecord = Geolocation::deleteAllRecords();
+
+      // upload new data
+      $file = fopen($target_file, "r");
+      while (($mapData = fgetcsv($file, $size, ",")) !== FALSE)
+      {
+        $sql = "INSERT INTO " . 
+          "geolocation_data(
+            lat_degree,
+            lat_minute,
+            lat_seconds,
+            lat_direction,
+            long_degree,
+            long_minute,
+            long_seconds,
+            long_direction) " . 
+          "values(
+            '$mapData[2]',
+            '$mapData[3]',
+            '$mapData[4]',
+            '$mapData[5]',
+            '$mapData[6]',
+            '$mapData[7]',
+            '$mapData[8]',
+            '$mapData[9]')";
+        $database->query($sql);
+      }
+      fclose($file);
+      redirect_to('/index.php');
+    }
+  }
 ?>
 
 
@@ -38,18 +103,13 @@ $geo_data = Geolocation::find_by_sql($sql);
 </head>
 
 <body>
-  <form action="upload.php" method="POST" enctype="multipart/form-data">
-    Select file to upload:
-    <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload File" name="submit">
-  </form>
-
   <main>
     <section class="mysql">
       <h2>Testing Queries From MySQL Database</h2>
       <table>
         <tr>
           <th>ID</th>
+          <th>Name</th>
           <th>Lat_Degree</th>
           <th>Lat_Minute</th>
           <th>Lat_Seconds</th>
@@ -60,6 +120,7 @@ $geo_data = Geolocation::find_by_sql($sql);
           <th>Long_Direction</th>
           <th>LAT</th>
           <th>LONG</th>
+          <th>Attitude</th>
           <th>&nbsp;</th>
         </tr>
 
@@ -80,6 +141,8 @@ $geo_data = Geolocation::find_by_sql($sql);
           ?>
           <tr>
             <td><?php echo h($data->id); ?></td>
+            <td><?php echo h($data->name); ?></td>
+
             <td><?php echo h($data->lat_degree); ?></td>
             <td><?php echo h($data->lat_minute); ?></td>
             <td><?php echo h($data->lat_seconds); ?></td>
@@ -92,6 +155,8 @@ $geo_data = Geolocation::find_by_sql($sql);
 
             <td class="lat"><?php echo h(number_format($data->latitude, 4)); ?></td>
             <td class="long"><?php echo h(number_format($data->longitude, 4)); ?></td>
+
+            <td><?php echo h($data->attitude); ?></td>
 
             <td><input class="reverseGeocode" type="button" value="Reverse Geocode"></td>
             <!-- <td><a href="methods/edit.php?id=<?php //echo h(u($data->id)); ?>">Edit</a></td> -->
@@ -108,6 +173,14 @@ $geo_data = Geolocation::find_by_sql($sql);
       ?>
       <div class="button_wrapper">
         <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">
+      </div>
+
+      <div class="button_wrapper">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
+          Select a file to upload:
+          <input type="file" name="upload_file" id="upload_file">
+          <input type="submit" value="Upload and Replace Table" name="upload">
+        </form>
       </div>
     </section>
 

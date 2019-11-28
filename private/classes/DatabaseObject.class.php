@@ -156,6 +156,12 @@ class DatabaseObject {
     // calling $user->delete().
   }
 
+  public function deleteAllRecords() {
+    $sql = "TRUNCATE TABLE " . static::$table_name . " ";
+    $result = self::$database->query($sql);
+    return $result;
+  }
+
 }
 
 ?>
