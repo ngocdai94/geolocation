@@ -16,6 +16,7 @@
 let map;
 let geocoder;
 let infowindow;
+let infoWindowArray = new Array();
 let classSubmit;
 let classLat;
 let classLong;
@@ -34,7 +35,6 @@ function initMap() {
     });
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
-
     classSubmit = document.getElementsByClassName('reverseGeocode');
     classLat = document.getElementsByClassName('lat');
     classLong = document.getElementsByClassName('long');
@@ -53,6 +53,9 @@ function initMap() {
 
 function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
     let latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+
+    // infoWindowArray[nextMarker] = new google.maps.InfoWindow;
+
     geocoder.geocode({'location': latlng}, function(results, status) {
         if (status === 'OK') {
             console.log(results);
@@ -60,7 +63,7 @@ function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
                 // map.setZoom(15);
                 // map.setCenter(latlng);
                 marker = new google.maps.Marker({
-                    position: latlng,
+                    position: new google.maps.LatLng(latlng),
                     animation: google.maps.Animation.DROP,
                     //title: results[0],
                     map: map
@@ -68,20 +71,32 @@ function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
                 // infowindow.setContent(results[0].formatted_address);
                 // infowindow.open(map, marker);
 
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.setContent(results[0].formatted_address);
-                    infowindow.open(marker.get('map'), marker);       
-                });
+                /** 
+                 * Source: https://stackoverflow.com/questions/47777107/how-to-add-google-maps-with-multiple-markers-showing-infowindows-on-load-and-on
+                 * 
+                */
+                google.maps.event.addListener(marker, 'click', (function(marker, nextMarker) {
+                    return function () {
+                        infowindow.close();     // Close previously opened infowindow
+                        map.setCenter(latlng);  // Set center
+                        infowindow.setContent(results[0].formatted_address); // Set address
+                        infowindow.open(map, marker);
+                    }
+                    // infowindow.close(); // Close previously opened infowindow
+                    // infowindow.setContent(results[0].formatted_address); // Set address
+                    // infowindow.open(map, marker);
+                })(marker, nextMarker));
             } else {
                 window.alert('No results found');
             }
         } else {
             // window.alert('Geocoder failed due to: ' + status);
             if (status === 'OVER_QUERY_LIMIT') {
+                // console.log(status + " Querry Delay: " + delay + "ms " + '\n');
                 nextMarker--;
                 delay++;
             } else {
-                console.log(status + " Delay: " + delay + "ms " + '\n');
+                console.log(status + " Server Delay: " + delay + "ms " + '\n');
             }
         }
         next();
