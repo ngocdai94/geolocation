@@ -18,6 +18,9 @@
   $sql .= "OFFSET {$pagination->offset()}";
   $geo_data = Geolocation::find_by_sql($sql);
 
+  // All data in the MySQL table
+  $all_geo_data = Geolocation::find_all();
+
   if (isset($_POST['upload'])) { //check if form was submitted
     $input = $_POST['upload_file']; //get input text
     // $message = "Success! You uploaded: " . $input;
@@ -88,6 +91,17 @@
       fclose($file);
       redirect_to('/index.php');
     }
+
+    // Reverse all the geolocation data to Latitude and Longitude when it is first uploaded.
+    foreach ($all_geo_data as $data) {
+      $temp_id = 0;
+      if ($data->latitude == 0 || $data->longitude == 0) {
+        $temp_id = $data->id;
+        $data->latitude = $data->convertLat();
+        $data->longitude = $data->convertLong();
+        $data->save();
+      }
+    }
   }
 ?>
 
@@ -138,7 +152,7 @@
             $data->longitude = $data->convertLong();
             $data->save();
           }
-          ?>
+        ?>
           <tr>
             <td><?php echo h($data->id); ?></td>
             <td><?php echo h($data->name); ?></td>
@@ -166,13 +180,19 @@
           </tr>
         <?php } ?>
       </table>
-      
+
       <!-- Pagination Links -->
       <?php 
         echo $pagination->page_links($_SERVER['PHP_SELF']);
       ?>
+
+      <!-- Buttons -->
       <div class="button_wrapper">
         <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">
+      </div>
+
+      <div>
+          <button type="button">Reverse All Data from MySQL</button>
       </div>
 
       <div class="button_wrapper">
@@ -184,6 +204,7 @@
       </div>
     </section>
 
+    <!-- Google Maps -->
     <section class="map">
         <div id="map"></div>
     </section>

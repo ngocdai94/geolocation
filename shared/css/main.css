@@ -101,6 +101,11 @@ th, td {
     text-decoration: none;
 }
 
+/* File Input Text Box */
+#upload_file {
+    border: 1px solid #808080;
+}
+
 /* Pagination */
 .pagination {
     margin: 1em 0;

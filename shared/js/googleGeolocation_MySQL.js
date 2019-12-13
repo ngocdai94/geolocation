@@ -25,7 +25,7 @@ let marker = null;
 let delay = 100;
 let totalGeocode = 0;
 let nextGeocode = 0;
-let totalMarkers = 0;
+let totalMarkersOnPage = 0;
 let nextMarker = 0;
 
 function initMap() {
@@ -40,7 +40,7 @@ function initMap() {
     classLong = document.getElementsByClassName('long');
 
     totalGeocode = classSubmit.length;
-    totalMarkers = totalGeocode;
+    totalMarkersOnPage = totalGeocode;
 
     for (let i = 0; i < totalGeocode; i++) {
         classSubmit[i].addEventListener('click', function() {
@@ -245,7 +245,7 @@ function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
 // }
 
 function theNextMarker() {
-    if (nextMarker < totalMarkers) {
+    if (nextMarker < totalMarkersOnPage) {
         setTimeout(allGeolocationMarkers (geocoder, map, classLat[nextMarker].innerText, classLong[nextMarker].innerText, theNextMarker) , delay);
         nextMarker++;
     } else {
@@ -255,5 +255,6 @@ function theNextMarker() {
 
 // ======= Call that function for the first time =======
 window.onload = () => {
-    theNextMarker();
+    //theNextMarker(); // automatically reverse geolocation on current display table
+    
 };
