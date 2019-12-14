@@ -82,6 +82,11 @@ th, td {
     background-color: #999;
 }
 
+/* Hidden Field */
+.hidden {
+    display: none;
+}
+
 /* Buttons */
 .button_wrapper {
     /* width: 100%;

@@ -14,7 +14,8 @@
     // Reset Latitude and Longitude to 0
     $geoData->latitude = 0;
     $geoData->longitude = 0;
-
+    $geoData->attitude = 0;
+    
     // Save record using post parameters
     $args = $_POST['geoData'];
     $geoData->merge_attributes($args);
@@ -22,7 +23,7 @@
 
     if($result === true) {
       $session->message('The geoData was updated successfully.');
-      redirect_to('/index.php');
+      //redirect_to('/index.php');
     } else {
       // show errors
     }

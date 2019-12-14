@@ -1,7 +1,7 @@
 <?php require_once('private/initialize.php'); ?>
 <?php
   // load PHP Excel
-  use SimpleExcel\SimpleExcel;
+  // use SimpleExcel\SimpleExcel;
 
   // Initilize Pagination Variable and Get Number of Items in MySQL Database
   $current_page = $_GET['page'] ?? 1;
@@ -10,16 +10,6 @@
 
   // Instantiate a pagination object
   $pagination = new Pagination($current_page, $per_page, $total_count);
-
-  // Find all geolocation data by using pagination 
-  // instead of $geo_data = Geolocation::find_all();
-  $sql = "SELECT * FROM geolocation_data ";
-  $sql .= "LIMIT {$per_page} ";
-  $sql .= "OFFSET {$pagination->offset()}";
-  $geo_data = Geolocation::find_by_sql($sql);
-
-  // All data in the MySQL table
-  $all_geo_data = Geolocation::find_all();
 
   if (isset($_POST['upload'])) { //check if form was submitted
     $input = $_POST['upload_file']; //get input text
@@ -88,21 +78,49 @@
             '$mapData[9]')";
         $database->query($sql);
       }
+
       fclose($file);
       redirect_to('/index.php');
     }
+  }
 
-    // Reverse all the geolocation data to Latitude and Longitude when it is first uploaded.
-    foreach ($all_geo_data as $data) {
-      $temp_id = 0;
-      if ($data->latitude == 0 || $data->longitude == 0) {
-        $temp_id = $data->id;
-        $data->latitude = $data->convertLat();
-        $data->longitude = $data->convertLong();
-        $data->save();
-      }
+  // All data in the MySQL table
+  $all_geo_data = Geolocation::find_all();
+
+  // Reverse all the geolocation data to Latitude and Longitude when it is first uploaded.
+  foreach ($all_geo_data as $data) {
+    if ($data->latitude == 0 || $data->longitude == 0)
+    {
+      $geoData = Geolocation::find_by_id($data->id);
+      
+      // Find actual Latitude, Longitude and Attitude
+      $data->latitude = $data->convertLat();
+      $data->longitude = $data->convertLong();
+
+      // Merge all the attribute and save to the MySQL Database
+      $args = array (
+        "name" => '',
+        "lat_degree" => $data->lat_degree,
+        "lat_minute" => $data->lat_minute,
+        "lat_seconds" => $data->lat_seconds,
+        "lat_direction" => $data->lat_direction,
+        "long_degree" => $data->long_degree,
+        "long_minute" => $data->long_minute,
+        "long_seconds" => $data->long_seconds,
+        "long_direction" => $data->long_direction,
+        "latitude" => $data->latitude,
+        "longitude" => $data->longitude,
+        "attitude" => 0);
+      $geoData->merge_attributes($args);
+      $result=$geoData->save();
     }
   }
+
+  // Limit number of data rows per page
+  $sql = "SELECT * FROM geolocation_data ";
+  $sql .= "LIMIT {$per_page} ";
+  $sql .= "OFFSET {$pagination->offset()}";
+  $geo_data = Geolocation::find_by_sql($sql);
 ?>
 
 
@@ -145,13 +163,6 @@
 
         <?php
         foreach ($geo_data as $data) {
-          $temp_id = 0;
-          if ($data->latitude == 0 || $data->longitude == 0) {
-            $temp_id = $data->id;
-            $data->latitude = $data->convertLat();
-            $data->longitude = $data->convertLong();
-            $data->save();
-          }
         ?>
           <tr>
             <td><?php echo h($data->id); ?></td>
@@ -186,13 +197,23 @@
         echo $pagination->page_links($_SERVER['PHP_SELF']);
       ?>
 
+      <!-- Hidden Fields -->
+      <div class="hidden">
+        <table>
+          <?php
+            foreach ($all_geo_data as $data) {
+          ?>
+            <tr>
+              <td class="latAll"><?php echo h(number_format($data->latitude, 4)); ?></td>
+              <td class="longAll"><?php echo h(number_format($data->longitude, 4)); ?></td>
+            </tr> 
+          <?php } ?>
+        </table>
+      </div>
       <!-- Buttons -->
       <div class="button_wrapper">
-        <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">
-      </div>
-
-      <div>
-          <button type="button">Reverse All Data from MySQL</button>
+        <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">&nbsp;&nbsp;
+        <input id="callReverseAll" type="button" value="Reverse All Data from MySQL">
       </div>
 
       <div class="button_wrapper">

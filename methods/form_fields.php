@@ -8,6 +8,11 @@ if(!isset($geoData)) {
 ?>
 
 <dl>
+  <dt>Name</dt>
+  <dd><input class="grayout" style="background-color:#999;" type="text" name="geoData[name]" disabled value="<?php echo $geoData->name ?>" /></dd>
+</dl>
+
+<dl>
   <dt>Latitude Degree</dt>
   <dd><input type="text" name="geoData[lat_degree]" value="<?php echo h($geoData->lat_degree); ?>" /></dd>
 </dl>
@@ -55,4 +60,9 @@ if(!isset($geoData)) {
 <dl>
   <dt>LONG</dt>
   <dd><input class="grayout" style="background-color:#999;" type="text" name="geoData[longitude]" disabled value="<?php echo h(number_format($geoData->longitude, 4)); ?>" /></dd>
+</dl>
+
+<dl>
+  <dt>Attitude</dt>
+  <dd><input class="grayout" style="background-color:#999;" type="text" name="geoData[attitude]" disabled value="<?php echo h(number_format($geoData->attitude, 4)); ?>" /></dd>
 </dl>

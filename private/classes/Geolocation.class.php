@@ -45,7 +45,7 @@ class Geolocation extends DatabaseObject {
     $this->long_direction = $args['long_direction'] ?? '';
     $this->latitude = $args['latitude'] ?? '0';
     $this->longitude = $args['longitude'] ?? '0';
-    $this->attitude = $args['attitude'] ?? '';
+    $this->attitude = $args['attitude'] ?? '0';
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {
@@ -74,59 +74,59 @@ class Geolocation extends DatabaseObject {
   protected function validate() {
     $this->errors = [];
 
-    // Lattitude Validation
-    if(is_blank($this->lat_degree)) {
-      $this->errors[] = "Lattitude degree cannot be blank";
-    }
-    if(is_blank($this->lat_minute)) {
-      $this->errors[] = "Lattitude minute cannot be blank";
-    }
-    if(is_blank($this->lat_seconds)) {
-      $this->errors[] = "Lattitude seconds cannot be blank";
-    }
-    if(is_blank($this->lat_seconds)) {
-      $this->errors[] = "Lattitude direction cannot be blank";
-    }
-    if(strlen($this->lat_direction) > 1) {
-      $this->errors[] = "Lattitude direction can only be 1 character";
-    }
-    if
-    (
-      strcmp($this->lat_direction, "N") == 0 ||
-      strcmp($this->lat_direction, "n") == 0  ||
-      strcmp($this->lat_direction, "S") == 0  ||
-      strcmp($this->lat_direction, "S") == 0 ) {
-      // Good!
-    } else {
-      $this->errors[] = "Lattitude direction can be either N or S " . var_dump($this->lat_direction);
-    }
+    // // Lattitude Validation
+    // if(is_blank($this->lat_degree)) {
+    //   $this->errors[] = "Lattitude degree cannot be blank";
+    // }
+    // if(is_blank($this->lat_minute)) {
+    //   $this->errors[] = "Lattitude minute cannot be blank";
+    // }
+    // if(is_blank($this->lat_seconds)) {
+    //   $this->errors[] = "Lattitude seconds cannot be blank";
+    // }
+    // if(is_blank($this->lat_seconds)) {
+    //   $this->errors[] = "Lattitude direction cannot be blank";
+    // }
+    // if(strlen($this->lat_direction) > 1) {
+    //   $this->errors[] = "Lattitude direction can only be 1 character";
+    // }
+    // if
+    // (
+    //   strcmp($this->lat_direction, "N") == 0 ||
+    //   strcmp($this->lat_direction, "n") == 0  ||
+    //   strcmp($this->lat_direction, "S") == 0  ||
+    //   strcmp($this->lat_direction, "S") == 0 ) {
+    //   // Good!
+    // } else {
+    //   $this->errors[] = "Lattitude direction can be either N or S " . var_dump($this->lat_direction);
+    // }
 
-    // Longtitude Validation
-    if(is_blank($this->long_degree)) {
-      $this->errors[] = "Longitude degree cannot be blank.";
-    }
-    if(is_blank($this->long_minute)) {
-      $this->errors[] = "Longitude monute cannot be blank.";
-    }
-    if(is_blank($this->long_seconds)) {
-      $this->errors[] = "Longitude seconds cannot be blank.";
-    }
-    if(is_blank($this->long_direction)) {
-      $this->errors[] = "Longitude direction cannot be blank.";
-    }
-    if(strlen($this->long_direction) > 1) {
-      $this->errors[] = "Longitude direction can only be 1 character";
-    }
-    if
-    (
-      strcmp($this->long_direction, "W") == 0 ||
-      strcmp($this->long_direction, "w") == 0  ||
-      strcmp($this->long_direction, "E") == 0  ||
-      strcmp($this->long_direction, "e") == 0 ) {
-      // Good!
-    } else {
-      $this->errors[] = "Lattitude direction can be either W or E " . var_dump($this->long_direction);
-    }
+    // // Longtitude Validation
+    // if(is_blank($this->long_degree)) {
+    //   $this->errors[] = "Longitude degree cannot be blank.";
+    // }
+    // if(is_blank($this->long_minute)) {
+    //   $this->errors[] = "Longitude monute cannot be blank.";
+    // }
+    // if(is_blank($this->long_seconds)) {
+    //   $this->errors[] = "Longitude seconds cannot be blank.";
+    // }
+    // if(is_blank($this->long_direction)) {
+    //   $this->errors[] = "Longitude direction cannot be blank.";
+    // }
+    // if(strlen($this->long_direction) > 1) {
+    //   $this->errors[] = "Longitude direction can only be 1 character";
+    // }
+    // if
+    // (
+    //   strcmp($this->long_direction, "W") == 0 ||
+    //   strcmp($this->long_direction, "w") == 0  ||
+    //   strcmp($this->long_direction, "E") == 0  ||
+    //   strcmp($this->long_direction, "e") == 0 ) {
+    //   // Good!
+    // } else {
+    //   $this->errors[] = "Lattitude direction can be either W or E " . var_dump($this->long_direction);
+    // }
 
     return $this->errors;
   }

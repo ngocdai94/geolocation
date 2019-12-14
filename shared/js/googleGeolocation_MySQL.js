@@ -17,16 +17,24 @@ let map;
 let geocoder;
 let infowindow;
 let infoWindowArray = new Array();
+
+// Each MySQL Row Variable
 let classSubmit;
 let classLat;
 let classLong;
 let marker = null;
 
+// Handle Querry Limit Variable
 let delay = 100;
-let totalGeocode = 0;
 let nextGeocode = 0;
-let totalMarkersOnPage = 0;
+let totalGeocode = 0;
 let nextMarker = 0;
+let totalMarkersOnPage = 0;
+
+// Handle All Data in MySQL Table
+let classLatAll;
+let classLongAll;
+let totalSqlData = 0;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -244,6 +252,7 @@ function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
 //     }
 // }
 
+// Automatically reverse geolocation on current display table
 function theNextMarker() {
     if (nextMarker < totalMarkersOnPage) {
         setTimeout(allGeolocationMarkers (geocoder, map, classLat[nextMarker].innerText, classLong[nextMarker].innerText, theNextMarker) , delay);
@@ -253,8 +262,31 @@ function theNextMarker() {
     }
 }
 
+// Reverse all geolocation in the MySQL Database
+function reverseAllMarkers () {
+    if (nextMarker < totalSqlData) {
+        setTimeout(allGeolocationMarkers (geocoder, map, classLatAll[nextMarker].innerText, classLongAll[nextMarker].innerText, reverseAllMarkers) , delay);
+        nextMarker++;
+    } else {
+        // We're done. Show map bounds
+    }
+}
+
+function callReverseAll() {
+     // reset nextMarker
+    classLatAll = document.getElementsByClassName('latAll');
+    classLongAll = document.getElementsByClassName('longAll');
+    totalSqlData = classLatAll.length;
+
+    reverseAllMarkers(classLatAll, classLongAll, totalSqlData);
+}
+
 // ======= Call that function for the first time =======
 window.onload = () => {
     //theNextMarker(); // automatically reverse geolocation on current display table
     
+    // Add Click Event on the callReverseAll Button
+    document.getElementById("callReverseAll").addEventListener('click', () => {
+        callReverseAll();
+    });
 };
