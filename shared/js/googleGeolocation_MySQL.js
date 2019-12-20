@@ -34,7 +34,16 @@ let totalMarkersOnPage = 0;
 // Handle All Data in MySQL Table
 let classLatAll;
 let classLongAll;
+let classNameAll;
 let totalSqlData = 0;
+let locationNames = new Array();
+let locationAltitudes = new Array();
+
+// Handle Uploading Delay
+let totalNames = 0;
+let uploadDone = false;
+let totalAltitudes = 0;
+let uploadingDelay = 500;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -59,6 +68,23 @@ function initMap() {
     }
 }
 
+let i = 0;
+function allGeolocationAltitudes() {
+    if (i < totalSqlData) {
+        let latitude = classLatAll[i].innerText;
+        let longitude = classLongAll[i].innerText;
+        $.get ('methods/getaltitude.php', {LAT: parseFloat(latitude), LONG: parseFloat(longitude)}, (elevation) => {
+            // console.log(elevation);
+            locationAltitudes.push(parseFloat(elevation));
+            i++;
+        });
+
+        setTimeout(()=>{
+            allGeolocationAltitudes();
+        }, uploadingDelay);
+    }
+}
+
 function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
     let latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
 
@@ -76,8 +102,10 @@ function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
                     //title: results[0],
                     map: map
                 });
-                // infowindow.setContent(results[0].formatted_address);
-                // infowindow.open(map, marker);
+            
+                // save location names to an array
+                // console.log(results[0].formatted_address);
+                locationNames.push(results[0].formatted_address);
 
                 /** 
                  * Source: https://stackoverflow.com/questions/47777107/how-to-add-google-maps-with-multiple-markers-showing-infowindows-on-load-and-on
@@ -262,23 +290,56 @@ function theNextMarker() {
     }
 }
 
+// Handle latency when uploading name back to MySQL
+function uploadNamesAltitude() {
+    if (totalNames < totalSqlData) {
+        totalNames = locationNames.length;
+    } else if (totalAltitudes < totalSqlData) {
+        totalAltitudes = locationAltitudes.length;
+    } else {
+        // Uploading all the names to the MySQL Database
+        $.get ('methods/uploadAltitudeNames.php', {altitudes: locationAltitudes, names: locationNames}, (result) => {
+            console.log(result);
+        });
+
+        // Finish uploading
+        uploadDone = true;
+    }
+
+    if (!uploadDone) {
+        setTimeout(()=>{
+            uploadNamesAltitude();
+        }, uploadingDelay);
+    }
+}
+
 // Reverse all geolocation in the MySQL Database
-function reverseAllMarkers () {
+function reverseAllMarkers() {
+    // Reverse geocode and dispkay all markers on the maps
     if (nextMarker < totalSqlData) {
         setTimeout(allGeolocationMarkers (geocoder, map, classLatAll[nextMarker].innerText, classLongAll[nextMarker].innerText, reverseAllMarkers) , delay);
         nextMarker++;
     } else {
-        // We're done. Show map bounds
+        // when finish, 
+        // If names and altitude have not been resolve, 
+        // resolve and save all location names and altitude back to MySQL Database 
+        if (classNameAll[0].innerText == "") {
+            uploadDone = false;
+            uploadNamesAltitude();
+        } else {
+            alert ("All of The Map Markers Have Been Loaded!!");
+        }
     }
 }
 
 function callReverseAll() {
-     // reset nextMarker
     classLatAll = document.getElementsByClassName('latAll');
     classLongAll = document.getElementsByClassName('longAll');
+    classNameAll = document.getElementsByClassName('locationName');
     totalSqlData = classLatAll.length;
 
     reverseAllMarkers(classLatAll, classLongAll, totalSqlData);
+    allGeolocationAltitudes();
 }
 
 // ======= Call that function for the first time =======

@@ -1,4 +1,4 @@
-﻿id,name,lat_degree,lat_minute,lat_seconds,lat_direction,long_degree,long_minute,long_seconds,long_direction,LAT,LONG,attitude
+﻿id,name,lat_degree,lat_minute,lat_seconds,lat_direction,long_degree,long_minute,long_seconds,long_direction,LAT,LONG,altitude
 1,,0,8,9.357,S,78,28,31.945,W,,,
 2,,10,38,27.42,N,61,22,51.969,W,,,
 3,,12,5,7.52,S,77,0,26.258,W,,,

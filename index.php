@@ -110,7 +110,7 @@
         "long_direction" => $data->long_direction,
         "latitude" => $data->latitude,
         "longitude" => $data->longitude,
-        "attitude" => 0);
+        "altitude" => 0);
       $geoData->merge_attributes($args);
       $result=$geoData->save();
     }
@@ -152,7 +152,7 @@
           <th>Long_Direction</th>
           <th>LAT</th>
           <th>LONG</th>
-          <th>Attitude</th>
+          <th>Altitude</th>
           <th>&nbsp;</th>
         </tr>
 
@@ -166,7 +166,7 @@
         ?>
           <tr>
             <td><?php echo h($data->id); ?></td>
-            <td><?php echo h($data->name); ?></td>
+            <td class="locationName"><?php echo h($data->name); ?></td>
 
             <td><?php echo h($data->lat_degree); ?></td>
             <td><?php echo h($data->lat_minute); ?></td>
@@ -181,7 +181,7 @@
             <td class="lat"><?php echo h(number_format($data->latitude, 4)); ?></td>
             <td class="long"><?php echo h(number_format($data->longitude, 4)); ?></td>
 
-            <td><?php echo h($data->attitude); ?></td>
+            <td><?php echo h(number_format($data->altitude, 2)) . ' m'; ?></td>
 
             <td><input class="reverseGeocode" type="button" value="Reverse Geocode"></td>
             <!-- <td><a href="methods/edit.php?id=<?php //echo h(u($data->id)); ?>">Edit</a></td> -->
@@ -198,7 +198,7 @@
       ?>
 
       <!-- Hidden Fields -->
-      <div class="hidden">
+      <div id="allLatLongMySQL" class="hidden">
         <table>
           <?php
             foreach ($all_geo_data as $data) {
@@ -210,6 +210,12 @@
           <?php } ?>
         </table>
       </div>
+
+      <div id="nameAndAltitude" class="hidden">
+
+      </div>
+      <!-- Hidden Fields Ends-->
+
       <!-- Buttons -->
       <div class="button_wrapper">
         <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='methods/add.php'">&nbsp;&nbsp;
@@ -328,6 +334,7 @@
   
   <footer></footer>
 
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script defer src="/shared/js/googleGeolocation_MySQL.js"></script>
   <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcHfA2WqTubyiS9ABL3Qi8y7xZkf3-s9c&libraries=places&callback=initMap"></script>
 </body>

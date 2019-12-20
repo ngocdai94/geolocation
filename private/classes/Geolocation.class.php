@@ -3,7 +3,7 @@
 class Geolocation extends DatabaseObject {
 
   static protected $table_name = 'geolocation_data';
-  static protected $db_columns = ['id', 'name', 'lat_degree', 'lat_minute', 'lat_seconds', 'lat_direction', 'long_degree', 'long_minute', 'long_seconds', 'long_direction', 'latitude', 'longitude', 'attitude'];
+  static protected $db_columns = ['id', 'name', 'lat_degree', 'lat_minute', 'lat_seconds', 'lat_direction', 'long_degree', 'long_minute', 'long_seconds', 'long_direction', 'latitude', 'longitude', 'altitude'];
 
   public $id;
   public $name;
@@ -17,7 +17,7 @@ class Geolocation extends DatabaseObject {
   public $long_direction;
   public $latitude;
   public $longitude;
-  public $attitude;
+  public $altitude;
 
   // public const CATEGORIES = ['Road', 'Mountain', 'Hybrid', 'Cruiser', 'City', 'BMX'];
 
@@ -45,7 +45,7 @@ class Geolocation extends DatabaseObject {
     $this->long_direction = $args['long_direction'] ?? '';
     $this->latitude = $args['latitude'] ?? '0';
     $this->longitude = $args['longitude'] ?? '0';
-    $this->attitude = $args['attitude'] ?? '0';
+    $this->altitude = $args['altitude'] ?? '0';
 
     // Caution: allows private/protected properties to be set
     // foreach($args as $k => $v) {
