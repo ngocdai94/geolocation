@@ -1,0 +1,18 @@
+.sexagesimal {
+    width: 36px;
+}
+
+.sexagesimalsec {
+    width: 64px;
+}
+
+.sexagesimal, .sexagesimalsec {
+    display: inline-block;
+    padding: 6px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}

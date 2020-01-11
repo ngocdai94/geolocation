@@ -29,16 +29,16 @@ function initMap() {
     // document.getElementByID('submit').addEventListener('click', function() {
     //   geocodeLatLng(geocoder, map, infowindow);
     // });
-    let classSubmit = document.getElementsByClassName('submit');
-    let classLatLng = document.getElementsByClassName('latlng');
-    for (let i = 0; i < classSubmit.length; i++) {
-        classSubmit[i].addEventListener('click', function() {
-            geocodeLatLng(geocoder, map, infowindow, classLatLng[i].value);
-        });
+    // let classSubmit = document.getElementsByClassName('submit');
+    // let classLatLng = document.getElementsByClassName('latlng');
+    // for (let i = 0; i < classSubmit.length; i++) {
+    //     classSubmit[i].addEventListener('click', function() {
+    //         geocodeLatLng(geocoder, map, infowindow, classLatLng[i].value);
+    //     });
 
-        // mark all geolocation on the map
-        allGeolocationMarkers (geocoder, map, classLatLng[i].value);
-    }
+    //     // mark all geolocation on the map
+    //     allGeolocationMarkers (geocoder, map, classLatLng[i].value);
+    // }
 }
 
 function allGeolocationMarkers (geocoder, map, input) {
