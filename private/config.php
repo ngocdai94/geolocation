@@ -5,6 +5,8 @@
 define ('THIS_PAGE', $_SERVER['PHP_SELF']);
 define ('FILE_NAME', basename(THIS_PAGE));
 
+// Get API Keys
+require_once('api_keys.php');
 
 // helps prevent date errors
 date_default_timezone_set('America/Los_Angeles');
@@ -20,6 +22,11 @@ $dmsActive = '';
 
 // dynamic css variable
 $cssForm = '';
+$dmsCSS = '';
+
+// Google Maps Script
+$googleMaps = '';
+$mysqlScript = '';
 
 // edit dynamic pages
 $title = FILE_NAME;
@@ -35,13 +42,15 @@ switch(FILE_NAME){
         //$logo="fa-home";
         $mysqlActive = 'active';
         $mysqlScript = '/shared/js/googleGeolocation_MySQL.js';
-    break;
+        $googleMaps = GOOGLE_MAPS;
+        break;
 
     case 'dms-geolocation.php':
         $title = "DMS Geolocation";
         $dmsActive = 'active';
         $dmsCSS = '/shared/css/dms.css';
         $mysqlScript = '/shared/js/googleGeolocation_Embedded.js';
+        $googleMaps = GOOGLE_MAPS;
     break;
 };
 ?>

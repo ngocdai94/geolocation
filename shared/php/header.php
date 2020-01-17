@@ -21,11 +21,11 @@
 
     <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/dashboard/"> -->
 
+    <link rel="stylesheet" type="text/css" media="screen" href="/shared/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="/shared/css/main.css"/>
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" media="screen" href="/shared/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="<?=$dmsCSS?>"/>
-    <style>
+    <!-- <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -40,7 +40,7 @@
                 font-size: 3.5rem;
             }
         }
-    </style>
+    </style> -->
     
     <!-- Custom styles for this template -->
     <link href="/shared/css/dashboard.css" rel="stylesheet">

@@ -17,7 +17,7 @@
     $input = $_POST['upload_file']; //get input text
     // $message = "Success! You uploaded: " . $input;
 
-    $target_dir = "uploads/";
+    $target_dir = "../uploads/";
     $isUpload = false;
     $size = 0;
     $target_file = $target_dir . basename($_FILES["upload_file"]["name"]);
@@ -82,7 +82,7 @@
       }
 
       fclose($file);
-      redirect_to('/index.php');
+      redirect_to('/tabs/mysql-geolocation.php');
     }
   }
 
@@ -126,32 +126,37 @@
 ?>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <section class="mysql">
-            <h2>Testing Queries From MySQL Database</h2>
-            <table>
+          <h2>Data From MySQL Database</h2>
+
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
                 <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Lat_Degree</th>
-                <th>Lat_Minute</th>
-                <th>Lat_Seconds</th>
-                <th>Lat_Direction</th>
-                <th>Long_Degree</th>
-                <th>Long_Minute</th>
-                <th>Long_Seconds</th>
-                <th>Long_Direction</th>
-                <th>LAT</th>
-                <th>LONG</th>
-                <th>Altitude</th>
-                <th>&nbsp;</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Lat_Degree</th>
+                  <th>Lat_Minute</th>
+                  <th>Lat_Seconds</th>
+                  <th>Lat_Direction</th>
+                  <th>Long_Degree</th>
+                  <th>Long_Minute</th>
+                  <th>Long_Seconds</th>
+                  <th>Long_Direction</th>
+                  <th>LAT</th>
+                  <th>LONG</th>
+                  <th>Altitude</th>
+                  <th>&nbsp;</th>
                 </tr>
+              </thead>
 
-                <?php
-                // $geo_data = Geolocation::find_all();
-                // has been intergrated with Pagination Class and moved to the top
-                ?>
+              <?php
+              // $geo_data = Geolocation::find_all();
+              // has been intergrated with Pagination Class and moved to the top
+              ?>
 
+              <tbody>
                 <?php
-                foreach ($geo_data as $data) {
+                  foreach ($geo_data as $data) {
                 ?>
                 <tr>
                     <td><?php echo h($data->id); ?></td>
@@ -172,58 +177,64 @@
 
                     <td><?php echo h(number_format($data->altitude, 2)) . ' m'; ?></td>
 
-                    <td><input class="reverseGeocode" type="button" value="Reverse Geocode"></td>
-                    <!-- <td><a href="methods/edit.php?id=<?php //echo h(u($data->id)); ?>">Edit</a></td> -->
-                    <!-- <td><a href="methods/delete.php?id=<?php //echo h(u($data->id)); ?>">Delete</a></td> -->
-                    <td><input class="ultiliti_buttons" type="button" value="Edit" onclick="window.location.href='/methods/edit.php?id=<?php echo h(u($data->id)); ?>'"></td>
-                    <td><input class="ultiliti_buttons" type="button" value="Delete" onclick="window.location.href='/methods/delete.php?id=<?php echo h(u($data->id)); ?>'"></td>
+                    <td><input class="btn btn-sm btn-outline-secondary" type="button" value="Reverse Geocode"></td>
+                    <td><input class="btn btn-sm btn-outline-secondary" type="button" value="Edit" onclick="window.location.href='/methods/edit.php?id=<?php echo h(u($data->id)); ?>'"></td>
+                    <td><input class="btn btn-sm btn-outline-secondary" type="button" value="Delete" onclick="window.location.href='/methods/delete.php?id=<?php echo h(u($data->id)); ?>'"></td>
                 </tr>
                 <?php } ?>
+              </tbody>
             </table>
+          </div>
+          
+          <!-- Pagination Links -->
+          <?php 
+              echo $pagination->page_links($_SERVER['PHP_SELF']);
+          ?>
 
-            <!-- Pagination Links -->
-            <?php 
-                echo $pagination->page_links($_SERVER['PHP_SELF']);
-            ?>
+          <!-- Hidden Fields -->
+          <div id="allLatLongMySQL" class="hidden">
+              <table>
+              <?php
+                  foreach ($all_geo_data as $data) {
+              ?>
+                  <tr>
+                  <td class="latAll"><?php echo h(number_format($data->latitude, 4)); ?></td>
+                  <td class="longAll"><?php echo h(number_format($data->longitude, 4)); ?></td>
+                  </tr> 
+              <?php } ?>
+              </table>
+          </div>
 
-            <!-- Hidden Fields -->
-            <div id="allLatLongMySQL" class="hidden">
-                <table>
-                <?php
-                    foreach ($all_geo_data as $data) {
-                ?>
-                    <tr>
-                    <td class="latAll"><?php echo h(number_format($data->latitude, 4)); ?></td>
-                    <td class="longAll"><?php echo h(number_format($data->longitude, 4)); ?></td>
-                    </tr> 
-                <?php } ?>
-                </table>
-            </div>
+          <div id="nameAndAltitude" class="hidden">
 
-            <div id="nameAndAltitude" class="hidden">
+          </div>
+          <!-- Hidden Fields Ends-->
 
-            </div>
-            <!-- Hidden Fields Ends-->
+          <!-- Buttons -->
+          <div class="button_wrapper">
+              <input class="btn btn-sm btn-outline-primary" type="button" value="Add a New Data" onclick="window.location.href='/methods/add.php'">&nbsp;&nbsp;
+              <input id="callReverseAll" class="btn btn-sm btn-outline-primary" type="button" value="Reverse All Data from MySQL">
+          </div><br>
+          
+          <div class="input-group button_wrapper">
+            <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" name="upload_file" id="upload_file">
+                  <label class="custom-file-label" for="upload_file">Choose a file (.csv) to upload</label>
+                </div>
+                <div class="input-group-append">
+                  <input class="btn btn-outline-danger" type="submit" value="Upload and Replace Table" name="upload">
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
 
-            <!-- Buttons -->
-            <div class="button_wrapper">
-                <input class="ultiliti_buttons" type="button" value="Add a New Data" onclick="window.location.href='/methods/add.php'">&nbsp;&nbsp;
-                <input id="callReverseAll" type="button" value="Reverse All Data from MySQL">
-            </div>
-
-            <div class="button_wrapper">
-                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
-                Select a file to upload:
-                <input type="file" name="upload_file" id="upload_file">
-                <input type="submit" value="Upload and Replace Table" name="upload">
-                </form>
-            </div>
-            </section>
-
-            <!-- Google Maps -->
-            <section class="map">
-                <div id="map"></div>
-            </section>
+        <!-- Google Maps -->
+        <section class="map">
+            <div id="map"></div>
+        </section>
     </main>
 
 <?php include "../shared/php/footer.php"?>

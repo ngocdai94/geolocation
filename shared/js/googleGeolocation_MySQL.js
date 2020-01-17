@@ -73,7 +73,7 @@ function allGeolocationAltitudes() {
     if (i < totalSqlData) {
         let latitude = classLatAll[i].innerText;
         let longitude = classLongAll[i].innerText;
-        $.get ('methods/getaltitude.php', {LAT: parseFloat(latitude), LONG: parseFloat(longitude)}, (elevation) => {
+        $.get ('/methods/getaltitude.php', {LAT: parseFloat(latitude), LONG: parseFloat(longitude)}, (elevation) => {
             // console.log(elevation);
             locationAltitudes.push(parseFloat(elevation));
             i++;
@@ -298,7 +298,7 @@ function uploadNamesAltitude() {
         totalAltitudes = locationAltitudes.length;
     } else {
         // Uploading all the names to the MySQL Database
-        $.get ('methods/uploadAltitudeNames.php', {altitudes: locationAltitudes, names: locationNames}, (result) => {
+        $.get ('/methods/uploadAltitudeNames.php', {altitudes: locationAltitudes, names: locationNames}, (result) => {
             console.log(result);
         });
 
@@ -349,5 +349,12 @@ window.onload = () => {
     // Add Click Event on the callReverseAll Button
     document.getElementById("callReverseAll").addEventListener('click', () => {
         callReverseAll();
+    });
+
+   
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+        let fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
 };

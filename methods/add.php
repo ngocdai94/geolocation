@@ -29,29 +29,26 @@
     $geoData->longitude = 0;
   }
 ?>
+<?php include "../shared/php/header.php"?>
 
-<?php  ?>
-<?php  ?>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <div id="content">
+    <!-- <a class="back-link" href="<?php //echo ('/index.php'); ?>">&laquo; Back to List</a> -->
 
-<div id="content">
+    <div class="geolocation add">
+      <h1>Add a new Geolocation Data</h1>
 
-  <a class="back-link" href="<?php echo ('/index.php'); ?>">&laquo; Back to List</a>
+      <?php echo display_errors($geoData->errors); ?>
+      
+      <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+          
+          <?php include('form_fields.php'); ?>
 
-  <div class="geolocation add">
-    <h1>Add a new Geolocation Data</h1>
-
-    <?php echo display_errors($geoData->errors); ?>
-    
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-        
-        <?php include('form_fields.php'); ?>
-
-        <div id="operations">
-            <input type="submit" name="commit" value="Add" />
-        </div>
-    </form>
+          <div id="operations">
+              <input type="submit" class="btn btn-outline-success" name="commit" value="Add" />
+          </div>
+      </form>
+    </div>
   </div>
-
-</div>
-
-<?php //include(SHARED_PATH . '/staff_footer.php'); ?>
+</main>
+<?php include "../shared/php/footer.php"?>
