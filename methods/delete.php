@@ -22,6 +22,7 @@
 
 <?php //$page_title = 'Delete Bicycle'; ?>
 <?php //include(SHARED_PATH . '/staff_header.php'); ?>
+<?php include "../private/config.php"?>
 <?php include "../shared/php/header.php"?>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -29,12 +30,12 @@
     <!-- <a class="back-link" href="<?php //echo ('/index.php'); ?>">&laquo; Back to List</a> -->
 
     <div class="geolocation delete">
-      <h1>Delete Geolocation Data ID #<?php echo h(u($id));?></h1>
-      <p>Are you sure you want to delete this data? </p>
+      <h1>Delete Geolocation Data ID #<?php echo h(u($id));?></h1><br>
+      <p style="color:#ff0000;font-size:1rem;font-weight:600;">Are you sure you want to delete this data? </p>
 
       <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . h(u($id)); ?>" method="post">
         <div id="operations">
-          <input type="submit" class="btn btn-outline-success" name="commit" value="Delete Data" />
+          <input type="submit" class="btn btn-outline-danger" name="commit" value="YES, Delete It!" />
         </div>
       </form>
     </div>

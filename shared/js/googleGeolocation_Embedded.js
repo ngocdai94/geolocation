@@ -25,20 +25,6 @@ function initMap() {
     });
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
-
-    // document.getElementByID('submit').addEventListener('click', function() {
-    //   geocodeLatLng(geocoder, map, infowindow);
-    // });
-    // let classSubmit = document.getElementsByClassName('submit');
-    // let classLatLng = document.getElementsByClassName('latlng');
-    // for (let i = 0; i < classSubmit.length; i++) {
-    //     classSubmit[i].addEventListener('click', function() {
-    //         geocodeLatLng(geocoder, map, infowindow, classLatLng[i].value);
-    //     });
-
-    //     // mark all geolocation on the map
-    //     allGeolocationMarkers (geocoder, map, classLatLng[i].value);
-    // }
 }
 
 function allGeolocationMarkers (geocoder, map, input) {
@@ -101,11 +87,7 @@ function codeLatLng(origin) {
         map.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
         map.setZoom(17);
 
-
-        /**
-            Uncomment the line below to set multiple marker
-            */
-        // if (marker != null) marker.setMap(null);
+        if (marker != null) marker.setMap(null);
         marker = new google.maps.Marker({
             map: map,
             position: latlng

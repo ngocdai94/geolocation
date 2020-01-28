@@ -2,12 +2,12 @@
   require_once('../private/initialize.php');
 
   if(!isset($_GET['id'])) {
-    redirect_to('/index.php');
+    redirect_to('/tabs/mysql-geolocation.php');
   }
   $id = $_GET['id'];
   $geoData = Geolocation::find_by_id($id);
   if($geoData == false) {
-    redirect_to('/index.php');
+    redirect_to('/tabs/mysql-geolocation.php');
   }
 
   if(is_post_request()) {
@@ -23,7 +23,7 @@
 
     if($result === true) {
       $session->message('The geoData was updated successfully.');
-      //redirect_to('/index.php');
+      redirect_to('/tabs/mysql-geolocation.php');
     } else {
       // show errors
     }
@@ -33,11 +33,12 @@
   }
 
 ?>
+<?php include "../private/config.php"?>
 <?php include "../shared/php/header.php"?>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
   <div id="content">
-    <!-- <a class="back-link" href="<?php //echo ('/index.php'); ?>">&laquo; Back to List</a> -->
+    <a class="back-link" href="<?php echo ('/tabs/mysql-geolocation.php'); ?>">&laquo; Back to Database</a>
 
     <div class="geolocation edit">
       <h1>Edit Turple Coordinates For ID #<?php echo h(u($id));?></h1>
