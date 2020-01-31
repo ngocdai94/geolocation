@@ -226,6 +226,9 @@ function uploadNamesAltitude() {
 
 // Reverse all geolocation in the MySQL Database
 function reverseAllMarkers() {
+    // Zoom out of the Maps
+    map.setZoom(3);
+
     // Reverse geocode and dispkay all markers on the maps
     if (nextMarker < totalSqlData) {
         setTimeout(allGeolocationMarkers (geocoder, map, classLatAll[nextMarker].innerText, classLongAll[nextMarker].innerText, reverseAllMarkers) , delay);
@@ -253,17 +256,38 @@ function callReverseAll() {
     allGeolocationAltitudes();
 }
 
+// MySQL AJAX - Reload MySQL Database without reloading the webpage
+function refreshMySQL() {
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("mysql-table").innerHTML = this.responseText;
+        }
+    };
+    xmlhttp.open("GET","/methods/refresh.php",true);
+    xmlhttp.send();
+} 
+
 // ======= Call that function for the first time =======
 window.onload = () => {
     //theNextMarker(); // automatically reverse geolocation on current display table
+    
+    // Load MySQL Database
+    refreshMySQL();
     
     // Add Click Event on the callReverseAll Button
     document.getElementById("callReverseAll").addEventListener('click', () => {
         callReverseAll();
     });
 
-   
-    // Add the following code if you want the name of the file appear on select
+
+    // Add the following code if you want the name of the file appear on select box field
     $(".custom-file-input").on("change", function() {
         let fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
