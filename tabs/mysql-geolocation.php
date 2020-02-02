@@ -159,7 +159,6 @@
       <div class="button_wrapper">
         <input class="btn btn-sm btn-outline-primary" type="button" value="Refresh" onclick="refreshMySQL()">&nbsp;&nbsp;
         <input class="btn btn-sm btn-outline-primary" type="button" value="Add a New Data" onclick="window.location.href='/methods/add.php'">&nbsp;&nbsp;
-        <!-- <input id="callReverseAll" class="btn btn-sm btn-outline-primary" type="button" value="Reverse All Data from MySQL"> -->
         <input class="btn btn-sm btn-outline-primary" type="button" value="Reverse All Data from MySQL" onclick="callReverseAll()">
       </div><br>
       

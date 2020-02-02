@@ -7,8 +7,6 @@
 </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="<?=$mysqlScript?>"></script>
-    <script src="<?=$googleMaps?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script>
@@ -18,5 +16,7 @@
     <script src="/shared/js/feather.min.js"></script>
     <!-- <script src="/shared/js/Chart.min.js"></script> -->
     <script src="/shared/js/dashboard.js"></script>
+    <script src="<?=$mysqlScript?>"></script>
+    <script src="<?=$googleMaps?>"></script>
 </body>
 </html>

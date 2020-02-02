@@ -45,6 +45,10 @@ let uploadDone = false;
 let totalAltitudes = 0;
 let currentAltitude = 0;
 let uploadingDelay = 500;
+let loadingDelay = 1000;
+
+// Current MySQL Page
+let currentPage = 1;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -53,6 +57,10 @@ function initMap() {
     });
     geocoder = new google.maps.Geocoder;
     infowindow = new google.maps.InfoWindow;
+}
+
+function initMySQLButtons() {
+    // Initialize Click Events on MySQL Table
     classSubmit = document.getElementsByClassName('reverseGeocode');
     classLat = document.getElementsByClassName('lat');
     classLong = document.getElementsByClassName('long');
@@ -62,10 +70,8 @@ function initMap() {
 
     for (let i = 0; i < totalGeocode; i++) {
         classSubmit[i].addEventListener('click', function() {
-                geocodeLatLng(geocoder, map, infowindow, classLat[i].innerText, classLong[i].innerText)
+            geocodeLatLng(geocoder, map, infowindow, classLat[i].innerText, classLong[i].innerText);
         });
-        // mark all geolocation on the map
-        // allGeolocationMarkers (geocoder, map, classLat[i].innerText, classLong[i].innerText);
     }
 }
 
@@ -278,20 +284,19 @@ function refreshMySQL($str="") {
         xmlhttp.open("GET","/methods/refresh.php",true);
         xmlhttp.send();
     }
+
+    setTimeout(()=>{
+        initMySQLButtons();
+    }, loadingDelay);
 } 
 
 // ======= Call that function for the first time =======
-window.onload = () => {
+$ (() => {
     //theNextMarker(); // automatically reverse geolocation on current display table
     
     // Load MySQL Database
     refreshMySQL();
     
-    // Add Click Event on the callReverseAll Button
-    // document.getElementById("callReverseAll").addEventListener('click', () => {
-    //     callReverseAll();
-    // });
-
     // Add class selected to a selected click event
     $('.pagination a').click(function(){
          $(this).parent().find('a.text-dark').removeClass("text-dark");
@@ -303,4 +308,4 @@ window.onload = () => {
         let fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
-};
+});

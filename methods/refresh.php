@@ -57,9 +57,9 @@ echo '
 
         echo  '<td>' . h(number_format($data->altitude, 2)) . 'm' . '</td>';
 
-        echo  '<td><input class="btn btn-sm btn-outline-secondary reverseGeocode" type="button" value="Reverse Geocode"></td> ';
-        echo  '<td><input class="btn btn-sm btn-outline-secondary" type="button" value="Edit" onclick="window.location.href='. '/methods/edit.php?id=' . h(u($data->id)) . "'" . '"' . '></td>';
-        echo   '<td><input class="btn btn-sm btn-outline-secondary" type="button" value="Delete" onclick="window.location.href=' . '/methods/delete.php?id=' . h(u($data->id)) . "'" . '"' . '></td>';
+        echo  '<td><input class="reverseGeocode btn btn-sm btn-outline-secondary" type="button" value="Reverse Geocode"></td> ';
+        echo  '<td><input class="btn btn-sm btn-outline-secondary" type="button" value="Edit" onclick="window.location.href=' . "'" . '/methods/edit.php?id=' . h(u($data->id)) . "'" . '"' . '></td>';
+        echo   '<td><input class="btn btn-sm btn-outline-secondary" type="button" value="Delete" onclick="window.location.href=' . "'" . '/methods/delete.php?id=' . h(u($data->id)) . "'" . '"' . '></td>';
         echo  '</tr>';
     }
 echo '
