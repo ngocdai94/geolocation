@@ -5,12 +5,12 @@
   // load PHP Excel
   // use SimpleExcel\SimpleExcel;
 
-  // Initilize Pagination Variable and Get Number of Items in MySQL Database
+  //// Initilize Pagination Variable and Get Number of Items in MySQL Database
   $current_page = $_GET['page'] ?? 1;
   $per_page = 25;
   $total_count = Geolocation::count_all();
 
-  // Instantiate a pagination object
+  //// Instantiate a pagination object
   $pagination = new Pagination($current_page, $per_page, $total_count);
 
   if (isset($_POST['upload'])) { //check if form was submitted
@@ -118,11 +118,12 @@
     }
   }
 
-  // Limit number of data rows per page
-  $sql = "SELECT * FROM geolocation_data ";
-  $sql .= "LIMIT {$per_page} ";
-  $sql .= "OFFSET {$pagination->offset()}";
-  $geo_data = Geolocation::find_by_sql($sql);
+  //// Limit number of data rows per page
+
+  // $sql = "SELECT * FROM geolocation_data ";
+  // $sql .= "LIMIT {$per_page} ";
+  // $sql .= "OFFSET {$pagination->offset()}";
+  // $geo_data = Geolocation::find_by_sql($sql);
 ?>
   <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <section class="mysql">
@@ -134,19 +135,19 @@
       
       <!-- Pagination Links -->
       <?php 
-          echo $pagination->page_links($_SERVER['PHP_SELF']);
+          echo $pagination->page_links("");
       ?>
 
       <!-- Hidden Fields -->
       <div id="allLatLongMySQL" class="hidden">
           <table>
           <?php
-              foreach ($all_geo_data as $data) {
+            foreach ($all_geo_data as $data) {
           ?>
-              <tr>
+            <tr>
               <td class="latAll"><?php echo h(number_format($data->latitude, 4)); ?></td>
               <td class="longAll"><?php echo h(number_format($data->longitude, 4)); ?></td>
-              </tr> 
+            </tr> 
           <?php } ?>
           </table>
       </div>
@@ -158,7 +159,8 @@
       <div class="button_wrapper">
         <input class="btn btn-sm btn-outline-primary" type="button" value="Refresh" onclick="refreshMySQL()">&nbsp;&nbsp;
         <input class="btn btn-sm btn-outline-primary" type="button" value="Add a New Data" onclick="window.location.href='/methods/add.php'">&nbsp;&nbsp;
-        <input id="callReverseAll" class="btn btn-sm btn-outline-primary" type="button" value="Reverse All Data from MySQL">
+        <!-- <input id="callReverseAll" class="btn btn-sm btn-outline-primary" type="button" value="Reverse All Data from MySQL"> -->
+        <input class="btn btn-sm btn-outline-primary" type="button" value="Reverse All Data from MySQL" onclick="callReverseAll()">
       </div><br>
       
       <div class="input-group button_wrapper">

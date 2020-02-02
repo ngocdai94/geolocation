@@ -33,7 +33,7 @@ class Pagination {
   public function previous_link($url="") {
     $link = "";
     if($this->previous_page() != false) {
-      $link .= "<a href=\"{$url}?page={$this->previous_page()}\">";
+      $link .= "<a href=\"#\"" . "onclick=\"refreshMySQL({$this->previous_page()})\" . >";
       $link .= "&laquo; Previous</a>";
     }
     return $link;
@@ -42,7 +42,7 @@ class Pagination {
   public function next_link($url="") {
     $link = "";
     if($this->next_page() != false) {
-      $link .= "<a href=\"{$url}?page={$this->next_page()}\">";
+      $link .= "<a href=\"#\"" . "onclick=\"refreshMySQL({$this->next_page()})\" . >";
       $link .= "Next &raquo;</a>";
     }
     return $link;
@@ -51,11 +51,7 @@ class Pagination {
   public function number_links($url="") {
     $output = "";
     for($i=1; $i <= $this->total_pages(); $i++) {
-      if($i == $this->current_page) {
-        $output .= "<span class=\"selected\">{$i}</span>";
-      } else {
-        $output .= "<a href=\"{$url}?page={$i}\">{$i}</a>";
-      }
+      $output .= "<a class=\"pageLink\" href=\"#\"". "onclick=\"refreshMySQL({$i})\">{$i}</a>";
     }
     return $output;
   }
@@ -64,9 +60,9 @@ class Pagination {
     $output = "";
     if($this->total_pages() > 1) {
       $output .= "<div class=\"pagination\">";
-      $output .= $this->previous_link($url);
+      // $output .= $this->previous_link($url);
       $output .= $this->number_links($url);
-      $output .= $this->next_link($url);
+      // $output .= $this->next_link($url);
       $output .= "</div>";
     }
     return $output;

@@ -257,7 +257,7 @@ function callReverseAll() {
 }
 
 // MySQL AJAX - Reload MySQL Database without reloading the webpage
-function refreshMySQL() {
+function refreshMySQL($str="") {
     if (window.XMLHttpRequest) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
@@ -270,8 +270,14 @@ function refreshMySQL() {
             document.getElementById("mysql-table").innerHTML = this.responseText;
         }
     };
-    xmlhttp.open("GET","/methods/refresh.php",true);
-    xmlhttp.send();
+
+    if ($str != "") {
+        xmlhttp.open("GET","/methods/refresh.php?page="+$str,true);
+        xmlhttp.send();
+    } else {
+        xmlhttp.open("GET","/methods/refresh.php",true);
+        xmlhttp.send();
+    }
 } 
 
 // ======= Call that function for the first time =======
@@ -282,10 +288,15 @@ window.onload = () => {
     refreshMySQL();
     
     // Add Click Event on the callReverseAll Button
-    document.getElementById("callReverseAll").addEventListener('click', () => {
-        callReverseAll();
-    });
+    // document.getElementById("callReverseAll").addEventListener('click', () => {
+    //     callReverseAll();
+    // });
 
+    // Add class selected to a selected click event
+    $('.pagination a').click(function(){
+         $(this).parent().find('a.text-dark').removeClass("text-dark");
+         $(this).addClass("text-dark");
+    });
 
     // Add the following code if you want the name of the file appear on select box field
     $(".custom-file-input").on("change", function() {

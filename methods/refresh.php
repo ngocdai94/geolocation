@@ -65,4 +65,7 @@ echo '
 echo '
     </tbody>
   </table>';
+
+// echo $pagination->page_links($_SERVER['PHP_SELF']);
+// echo $pagination->page_links('/tabs/mysql-geolocation.php');
 ?>
