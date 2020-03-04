@@ -2,7 +2,7 @@
  * File Name: googleGeolocation.js
  * Author: Dai Nguyen
  * Description: This file will contain Google API Geolocation's functionalities
- * to result address location on the Google Maps
+ * to resolve address location on the Google Maps
  * 
  * References:
  *  1. 
@@ -16,7 +16,7 @@
 let map;
 let geocoder;
 let infowindow;
-let infoWindowArray = new Array();
+// let infoWindowArray = new Array();
 
 // Each MySQL Row Variables
 let classSubmit;
@@ -49,6 +49,10 @@ let loadingDelay = 1000;
 
 // Current MySQL Page
 let currentPage = 1;
+
+// Map Marker Object Array
+let mapMarkerArray = [];
+let jsonMarkers;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -113,6 +117,8 @@ function allGeolocationMarkers (geocoder, map, latitude, longitude, next) {
                 // console.log(results[0].formatted_address);
                 locationNames.push(results[0].formatted_address);
 
+                // save markers object to array
+                mapMarkerArray.push(marker);
                 /** 
                  * Source: https://stackoverflow.com/questions/47777107/how-to-add-google-maps-with-multiple-markers-showing-infowindows-on-load-and-on
                  * 
@@ -161,6 +167,9 @@ function geocodeLatLng(geocoder, map, infowindow, latitude, longitude) {
                     position: latlng,
                     map: map
                 });
+
+                console.log(marker);
+
                 google.maps.event.addListener(marker, 'click', function() {
                     infowindow.setContent(results[0].formatted_address);
                     infowindow.open(marker.get('map'), marker);       
@@ -235,7 +244,7 @@ function reverseAllMarkers() {
     // Zoom out of the Maps
     map.setZoom(3);
 
-    // Reverse geocode and dispkay all markers on the maps
+    // Reverse geocode and display all markers on the maps
     if (nextMarker < totalSqlData) {
         setTimeout(allGeolocationMarkers (geocoder, map, classLatAll[nextMarker].innerText, classLongAll[nextMarker].innerText, reverseAllMarkers) , delay);
         nextMarker++;
@@ -246,9 +255,8 @@ function reverseAllMarkers() {
         if (classNameAll[0].innerText == "") {
             uploadDone = false;
             uploadNamesAltitude();
-        } else {
-            alert ("All of The Map Markers Have Been Loaded!!");
         }
+        alert ("All of The Map Markers Have Been Loaded!!");
     }
 }
 
@@ -258,7 +266,7 @@ function callReverseAll() {
     classNameAll = document.getElementsByClassName('locationName');
     totalSqlData = classLatAll.length;
 
-    reverseAllMarkers(classLatAll, classLongAll, totalSqlData);
+    reverseAllMarkers();
     allGeolocationAltitudes();
 }
 

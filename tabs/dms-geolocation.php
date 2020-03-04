@@ -8,6 +8,24 @@
                     <h2>Get Reverse Geolocation by Longitude & Latitude</h2>
                     <div>
                         <form class="form-horizontal" role="form">
+                        <h4>Address</h4>
+                            <div class="form-group">
+                                <div class="col-md-12 addressWrapper">
+                                    <!-- <p class="h4">Address</p> -->
+                                    <input id="address" class="form-control" type="text" value="">
+                                    <div id="resultsWrapper">
+                                        <div id="results" class="mapSearchResults"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                <button type="button" class="btn btn-primary" onclick="codeAddress()">Get GPS Coordinates</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <form class="form-horizontal" role="form">
                             <h4>DD (decimal degrees)*</h4>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="latitude">Latitude</label>
