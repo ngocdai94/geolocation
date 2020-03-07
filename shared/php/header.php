@@ -22,9 +22,9 @@
     <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/dashboard/"> -->
 
     <link rel="stylesheet" type="text/css" media="screen" href="/shared/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="/shared/css/main.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="/shared/css/all.css"/>
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=$dmsCSS?>"/>
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="<//?=$dmsCSS?>"/> -->
     <!-- <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -41,7 +41,7 @@
             }
         }
     </style> -->
-    
+
     <!-- Custom styles for this template -->
     <link href="/shared/css/dashboard.css" rel="stylesheet">
 </head>
@@ -63,19 +63,19 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link <?=$homeActive?>" href="/">
+                            <a id="homeLink" class="nav-link active" href="#" onclick="showHome()">
                                 <span data-feather="home"></span>
                                 Dashboard <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?=$mysqlActive?>" href="/tabs/mysql-geolocation.php">
+                            <a id="mysqlLink" class="nav-link" href="#" onclick="showHideMySQL()">
                                 <span data-feather="file"></span>
                                 MySQL Database
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link <?=$dmsActive?>" href="/tabs/dms-geolocation.php">
+                            <a id="dmsLink" class="nav-link" href="#" onclick="showHideDMS()">
                                 <span data-feather="layers"></span>
                                 DMS Geolocation
                             </a>

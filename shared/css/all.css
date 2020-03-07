@@ -1,5 +1,16 @@
 /* Always set the map height explicitly to define the size of the div
 * element that contains the map. */
+#Home {
+    display: block;
+}
+
+#MySQL_Database {
+    display: block;
+}
+
+#DMS_Geo_Calculation {
+    display: block;
+}
 #map {
     display: block;
     /* height: 70%;
@@ -9,7 +20,10 @@
     margin: 0 auto;
     margin-top: 5%;
 }
-
+#mapEmbedded {
+    width: 100%;
+    height: 100%;
+}
 #floating-panel {
     /* position: absolute; */
     top: 10px;
@@ -68,7 +82,6 @@ th, td {
 form {
     width: 80%;
 }
-
 .col-form-label {
     font-size: 1rem;
     font-weight: 600;
@@ -104,4 +117,82 @@ input[type=submit] {
 .pagination span.selected {
     font-weight: bold;
     color: #000;
+}
+
+.sexagesimal {
+    width: 36px;
+}
+
+.sexagesimalsec {
+    width: 64px;
+}
+
+.sexagesimal, .sexagesimalsec {
+    display: inline-block;
+    padding: 6px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.left {
+    float: left;
+    /* width: 45%; */
+}
+
+/* ----- GRID LAYOUT FOR INTERIOR, PHOTOGRAPHY, and ABOUT ----- */
+.grid-container {
+    display: grid;
+    grid-gap: 10px; /*for row and column*/
+}
+
+
+.grid-item {
+    border: 0px solid #222;
+    /* text-align: center; */
+}
+/* ----- END OF GRID LAYOUT ----- */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .grid-container {
+        grid-template-columns: 100%; 
+    }
+
+    #mapEmbedded {
+        width: 100%;
+        height: 400px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .grid-container {
+        grid-template-columns: 45% 50%; 
+    }
+
+    #mapEmbedded {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .grid-container {
+        grid-template-columns: 45% 50%; 
+    }
+
+    #mapEmbedded {
+        width: 100%;
+        height: 100%;
+    }
 }

@@ -13,19 +13,19 @@
 /**
  * GLOBAL VARIABLE
  */
-let map;
-let geocoder;
-let infoWindow;
+let mapEmbedded;
+let geocoderEmbedded;
+let infoWindowEmbedded;
 let fromPlace = 0;
-let marker = null;
+let markerEmbedded = null;
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    mapEmbedded = new google.maps.Map(document.getElementById('mapEmbedded'), {
         zoom: 4,
         center: {lat: 41.4212156, lng: -104.1831666}
     });
-    geocoder = new google.maps.Geocoder;
-    infoWindow = new google.maps.InfoWindow;
+    geocoderEmbedded = new google.maps.Geocoder;
+    infoWindowEmbedded = new google.maps.InfoWindow;
 }
 
 function getCurrentLocation() {
@@ -37,68 +37,44 @@ function getCurrentLocation() {
                 lng: position.coords.longitude
             };
 
-            marker = new google.maps.Marker({
+            markerEmbedded = new google.maps.Marker({
                 position: new google.maps.LatLng(pos),
                 animation: google.maps.Animation.DROP,
                 //title: results[0],
-                map: map
+                mapEmbedded: mapEmbedded
             });
 
-            infoWindow.setPosition(pos);
-            // infoWindow.setContent('Location found.');
-            // infoWindow.open(map);
-            map.setCenter(pos);
-            map.setZoom(17);
+            infoWindowEmbedded.setPosition(pos);
+            // infoWindowEmbedded.setContent('Location found.');
+            // infoWindowEmbedded.open(mapEmbedded);
+            mapEmbedded.setCenter(pos);
+            mapEmbedded.setZoom(17);
         }, function () {
-            handleLocationError(true, infoWindow, map.getCenter());
+            handleLocationError(true, infoWindowEmbedded, mapEmbedded.getCenter());
         });
     } else {
         // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        handleLocationError(false, infoWindowEmbedded, mapEmbedded.getCenter());
     }
 }
 
-function allGeolocationMarkers (geocoder, map, input) {
-    let latlngStr = input.split(',', 2);
-    let latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
-    geocoder.geocode({'location': latlng}, function(results, status) {
-    if (status === 'OK') {
-        console.log(results);
-        if (results[0]) {
-        // map.setZoom(15);
-        // map.setCenter(latlng);
-        marker = new google.maps.Marker({
-            position: latlng,
-            map: map
-        });
-        // infoWindow.setContent(results[0].formatted_address);
-        // infoWindow.open(map, marker);
-        } else {
-        window.alert('No results found');
-        }
-    } else {
-        window.alert('Geocoder failed due to: ' + status);
-    }
-    });
-}
-
-function geocodeLatLng(geocoder, map, infoWindow, input) {
+function geocodeLatLng(geocoderEmbedded, mapEmbedded, infoWindowEmbedded, input) {
     // let input = document.getElementById('latlng').value;
     let latlngStr = input.split(',', 2);
     let latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
-    geocoder.geocode({'location': latlng}, function(results, status) {
+    geocoderEmbedded.geocode({'location': latlng}, function(results, status) {
     if (status === 'OK') {
         console.log(results);
         if (results[0]) {
-        map.setZoom(17);
-        map.setCenter(latlng);
+        mapEmbedded.setZoom(17);
+        mapEmbedded.setCenter(latlng);
         
-        marker = new google.maps.Marker({
+        markerEmbedded = new google.maps.Marker({
             position: latlng,
-            map: map
+            mapEmbedded: mapEmbedded
         });
-        infoWindow.setContent(results[0].formatted_address);
-        infoWindow.open(map, marker);
+        infoWindowEmbedded.setContent(results[0].formatted_address);
+        infoWindowEmbedded.open(mapEmbedded, markerEmbedded);
         } else {
         window.alert('No results found');
         }
@@ -111,7 +87,7 @@ function geocodeLatLng(geocoder, map, infoWindow, input) {
 function codeAddress() {
     var address = document.getElementById("address").value;
     if (fromPlace == 1) {
-        map.setCenterAnimated(locationFromPlace);
+        mapEmbedded.setCenterAnimated(locationFromPlace);
         annotation.selected = false;
         annotation.coordinate = locationFromPlace;
         annotation.address = addressFromPlace;
@@ -138,12 +114,12 @@ function codeLatLng(origin) {
         var latlng = new google.maps.LatLng(lat, lng);
         if (origin == 1) ddversdms();
         
-        map.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
-        map.setZoom(17);
+        mapEmbedded.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
+        mapEmbedded.setZoom(17);
 
-        if (marker != null) marker.setMap(null);
-        marker = new google.maps.Marker({
-            map: map,
+        if (markerEmbedded != null) markerEmbedded.setMap(null);
+        markerEmbedded = new google.maps.Marker({
+            mapEmbedded: mapEmbedded,
             position: latlng
         });
         myReverseGeocode(lat, lng, "");
@@ -194,12 +170,12 @@ function ddversdms() {
     document.getElementById("longitude_secondes").value = lngsec
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ?
+function handleLocationError(browserHasGeolocation, infoWindowEmbedded, pos) {
+    infoWindowEmbedded.setPosition(pos);
+    infoWindowEmbedded.setContent(browserHasGeolocation ?
                           'Error: The Geolocation service failed.' :
                           'Error: Your browser doesn\'t support geolocation.');
-    infoWindow.open(map);
+    infoWindowEmbedded.open(mapEmbedded);
 }
 
 function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
@@ -245,7 +221,7 @@ function myForwardGeocode(addr) {
     //                 var latres = data.results[0].geometry.lat;
     //                 var lngres = data.results[0].geometry.lng;
     //                 var pos = new mapkit.Coordinate(latres, lngres);
-    //                 map.setCenterAnimated(pos);
+    //                 mapEmbedded.setCenterAnimated(pos);
     //                 annotation.coordinate = pos;
     //                 updateAll("", data.results[0].formatted, latres, lngres)
     //             } else {
