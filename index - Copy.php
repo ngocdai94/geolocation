@@ -17,11 +17,11 @@
     $input = $_POST['upload_file']; //get input text
     // $message = "Success! You uploaded: " . $input;
 
-    $target_dir = "uploads/";
+    $target_dir = "../uploads/";
     $isUpload = false;
-    $uploadOk = 1;
     $size = 0;
     $target_file = $target_dir . basename($_FILES["upload_file"]["name"]);
+    $uploadOk = 1;
     $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
     // Check file size
@@ -41,7 +41,7 @@
 
     // if everything is ok, try to upload file
     } else {
-      if (move_uploaded_file($_FILES["upload_file"]["tmp_name"], $target_file)) {
+      if (move_uploaded_file($_FILES["upload_file"]["name"], $target_file)) {
         echo "The file ". basename( $_FILES["upload_file"]["name"]). " has been uploaded.";
         $isUpload = true;
       } else {

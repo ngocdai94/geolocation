@@ -7,14 +7,14 @@
   $id = $_GET['id'];
   $geoData = Geolocation::find_by_id($id);
   if($geoData == false) {
-    redirect_to('/index.php');
+    redirect_to('/');
   }
 
   if(is_post_request()) {
     // Delete bicycle
     $result = $geoData->delete();
     $session->message('The bicycle was deleted successfully.');
-    redirect_to('/index.php');
+    redirect_to('/');
   } else {
     // Display form
   }

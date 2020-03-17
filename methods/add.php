@@ -15,7 +15,7 @@
     if($result === true) {
       $new_id = $geoData->id;
       $session->message('New Geolocation Data was added successfully.');
-      redirect_to('/index.php');
+      redirect_to('/');
     } else {
       // show errors
     }

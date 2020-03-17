@@ -23,7 +23,7 @@
 
     if($result === true) {
       $session->message('The geoData was updated successfully.');
-      redirect_to('/tabs/mysql-geolocation.php');
+      redirect_to('/');
     } else {
       // show errors
     }
@@ -38,7 +38,7 @@
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
   <div id="content">
-    <a class="back-link" href="<?php echo ('/tabs/mysql-geolocation.php'); ?>">&laquo; Back to Database</a>
+    <!-- <a class="back-link" href="<?php //echo ('/tabs/mysql-geolocation.php'); ?>">&laquo; Back to Database</a> -->
 
     <div class="geolocation edit">
       <h1>Edit Turple Coordinates For ID #<?php echo h(u($id));?></h1>

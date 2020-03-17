@@ -63,19 +63,19 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a id="homeLink" class="nav-link active" href="#" onclick="showHome()">
+                            <a id="homeLink" class="nav-link active" href="#home" onclick="showHome()">
                                 <span data-feather="home"></span>
                                 Dashboard <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="mysqlLink" class="nav-link" href="#" onclick="showHideMySQL()">
+                            <a id="mysqlLink" class="nav-link" href="#mysql" onclick="showHideMySQL()">
                                 <span data-feather="file"></span>
                                 MySQL Database
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="dmsLink" class="nav-link" href="#" onclick="showHideDMS()">
+                            <a id="dmsLink" class="nav-link" href="#dms" onclick="showHideDMS()">
                                 <span data-feather="layers"></span>
                                 DMS Geolocation
                             </a>
