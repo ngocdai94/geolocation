@@ -191,7 +191,6 @@
         <section id="DMS_Geo_Calculation">
             <div class="grid-container"> 
                 <div class="grid-item">
-                    <p style="color:red">Get current location is not available due to the Web App is not HTTPS</p>
                     <section class="left">
                         <h2>Get Reverse Geolocation by Longitude & Latitude</h2>
                         <div>

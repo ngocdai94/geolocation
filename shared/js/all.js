@@ -306,7 +306,12 @@ function refreshMySQL($str="") {
 /**
  * From googleGeolocation_Embedded.js
  */
-function getCurrentLocation() {
+function getCurrentLocation(address) {
+    // Address and Posititions Place Holder
+    let addressResult;
+    let lat;
+    let long;
+
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -315,15 +320,33 @@ function getCurrentLocation() {
                 lng: position.coords.longitude
             };
 
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+
+            let latlng = {lat: parseFloat(lat), lng: parseFloat(long)};
+
             markerEmbedded = new google.maps.Marker({
                 position: new google.maps.LatLng(pos),
                 animation: google.maps.Animation.DROP,
-                //title: results[0],
+                // title: results[0],
                 map: mapEmbedded
             });
 
+            geocoder.geocode({'location': latlng}, 
+                function(results, status) {
+                    if (status === 'OK') {
+                        addressResult = results[0].formatted_address;
+                        
+                        document.getElementById("latitude").value = lat;
+                        document.getElementById("longitude").value = long
+                        document.getElementById("latlong").value = lat + "," +long;
+                        document.getElementById("address").value = addressResult;
+                    }
+                }
+            );
+
             infoWindowEmbedded.setPosition(pos);
-            // infoWindowEmbedded.setContent('Location found.');
+            infoWindowEmbedded.setContent(results[0]);
             // infoWindowEmbedded.open(mapEmbedded);
             mapEmbedded.setCenter(pos);
             mapEmbedded.setZoom(17);
@@ -355,7 +378,7 @@ function codeAddress() {
         bookUp(addressFromPlace, locationFromPlace.latitude, locationFromPlace.longitude);
         ddversdms()
     } else {
-        myForwardGeocode(address)
+        getCurrentLocation(address)
     }
 }
 
@@ -462,9 +485,6 @@ function myReverseGeocode(latToGeocode, lngToGeocode, intro) {
     // } else alert(trans.InvalidCoordinatesShort)
 }
 
-function myForwardGeocode(addr) {
-    getCurrentLocation();
-}
 /*----------------------------------------------------------------------------*/
 
 // Show or hide unecessary section on the Web Page
