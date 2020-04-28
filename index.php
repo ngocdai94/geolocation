@@ -206,7 +206,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                    <button type="button" class="btn btn-primary" onclick="codeAddress()">Get GPS Coordinates</button>
+                                    <button type="button" class="btn btn-primary" onclick="codeAddress()">Get Current GPS Coordinates</button>
                                     </div>
                                 </div>
                             </form>
@@ -229,7 +229,7 @@
 
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        <button type="button" class="btn btn-primary" onclick="codeLatLngEmbedded(1)">Get
+                                        <button type="button" class="btn btn-primary" onclick="codeLatLngEmbedded()">Get
                                             Address</button>
                                     </div>
                                 </div>

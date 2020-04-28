@@ -11,7 +11,7 @@
  */
 
 /**
- * GLOBAL VARIABLES
+ * GLOBAL letIABLES
  */
 let map;
 let geocoder;
@@ -21,16 +21,15 @@ let infowindow;
 let mapEmbedded;
 let geocoderEmbedded;
 let infoWindowEmbedded;
-let fromPlace = 0;
 let markerEmbedded = null;
 
-// Each MySQL Row Variables
+// Each MySQL Row letiables
 let classSubmit;
 let classLat;
 let classLong;
 let marker = null;
 
-// Handle Querry Limit Variables
+// Handle Querry Limit letiables
 let delay = 100;
 let nextGeocode = 0;
 let totalGeocode = 0;
@@ -307,8 +306,6 @@ function refreshMySQL($str="") {
  * From googleGeolocation_Embedded.js
  */
 function getCurrentLocation(address) {
-    // Address and Posititions Place Holder
-    let addressResult;
     let lat;
     let long;
 
@@ -323,33 +320,7 @@ function getCurrentLocation(address) {
             lat = position.coords.latitude;
             long = position.coords.longitude;
 
-            let latlng = {lat: parseFloat(lat), lng: parseFloat(long)};
-
-            markerEmbedded = new google.maps.Marker({
-                position: new google.maps.LatLng(pos),
-                animation: google.maps.Animation.DROP,
-                // title: results[0],
-                map: mapEmbedded
-            });
-
-            geocoder.geocode({'location': latlng}, 
-                function(results, status) {
-                    if (status === 'OK') {
-                        addressResult = results[0].formatted_address;
-                        
-                        document.getElementById("latitude").value = lat;
-                        document.getElementById("longitude").value = long
-                        document.getElementById("latlong").value = lat + "," +long;
-                        document.getElementById("address").value = addressResult;
-                    }
-                }
-            );
-
-            infoWindowEmbedded.setPosition(pos);
-            infoWindowEmbedded.setContent(results[0]);
-            // infoWindowEmbedded.open(mapEmbedded);
-            mapEmbedded.setCenter(pos);
-            mapEmbedded.setZoom(17);
+            embeddedGeocodeReverse(lat, long);
         }, function () {
             handleLocationError(true, infoWindowEmbedded, mapEmbedded.getCenter());
         });
@@ -360,50 +331,38 @@ function getCurrentLocation(address) {
 }
 
 function codeAddress() {
-    var address = document.getElementById("address").value;
-    if (fromPlace == 1) {
-        mapEmbedded.setCenterAnimated(locationFromPlace);
-        annotation.selected = false;
-        annotation.coordinate = locationFromPlace;
-        annotation.address = addressFromPlace;
-        annotation.lat = locationFromPlace.latitude;
-        annotation.lng = locationFromPlace.longitude;
-        setTimeout(function() {
-            annotation.selected = true
-        }, 500);
-        document.getElementById("latitude").value = locationFromPlace.latitude;
-        document.getElementById("longitude").value = locationFromPlace.longitude;
-        document.getElementById("latlong").value = locationFromPlace.latitude + "," + locationFromPlace.longitude;
-        document.getElementById("address").value = addressFromPlace;
-        bookUp(addressFromPlace, locationFromPlace.latitude, locationFromPlace.longitude);
-        ddversdms()
-    } else {
+    let address = document.getElementById("address").value;
+    // if (fromPlace == 1) {
+    //     mapEmbedded.setCenterAnimated(locationFromPlace);
+    //     annotation.selected = false;
+    //     annotation.coordinate = locationFromPlace;
+    //     annotation.address = addressFromPlace;
+    //     annotation.lat = locationFromPlace.latitude;
+    //     annotation.lng = locationFromPlace.longitude;
+    //     setTimeout(function() {
+    //         annotation.selected = true
+    //     }, 500);
+    //     document.getElementById("latitude").value = locationFromPlace.latitude;
+    //     document.getElementById("longitude").value = locationFromPlace.longitude;
+    //     document.getElementById("latlong").value = locationFromPlace.latitude + "," + locationFromPlace.longitude;
+    //     document.getElementById("address").value = addressFromPlace;
+    //     bookUp(addressFromPlace, locationFromPlace.latitude, locationFromPlace.longitude);
+    //     ddversdms()
+    // } else {
         getCurrentLocation(address)
-    }
+    // }
 }
 
 function codeLatLngEmbedded(origin) {
-    var lat = parseFloat(document.getElementById("latitude").value) || 0;
-    var lng = parseFloat(document.getElementById("longitude").value) || 0;
+    let lat = parseFloat(document.getElementById("latitude").value) || 0;
+    let lng = parseFloat(document.getElementById("longitude").value) || 0;
     if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
-        var latlng = new google.maps.LatLng(lat, lng);
-        if (origin == 1) ddversdms();
-        
-        mapEmbedded.setCenter(latlng); // NEED TO FIX THIS TO LINK TO THE CURRENT MAP
-        mapEmbedded.setZoom(17);
-
-        if (markerEmbedded != null) markerEmbedded.setMap(null);
-        markerEmbedded = new google.maps.Marker({
-            map: mapEmbedded,
-            position: latlng
-        });
-        myReverseGeocode(lat, lng, "");
-        fromPlace = 0;
+        embeddedGeocodeReverse(lat, lng);
     } else alert(trans.InvalidCoordinatesShort)
 }
 
 function dmsversdd() {
-    var lat, lng, nordsud, estouest, latitude_degres, latitude_minutes, latitude_secondes, longitude_degres, longitude_minutes, longitude_secondes;
+    let lat, lng, nordsud, estouest, latitude_degres, latitude_minutes, latitude_secondes, longitude_degres, longitude_minutes, longitude_secondes;
     if (document.getElementById("sud").checked) nordsud = -1;
     else nordsud = 1;
     if (document.getElementById("ouest").checked) estouest = -1;
@@ -418,11 +377,12 @@ function dmsversdd() {
     lng = estouest * (longitude_degres + longitude_minutes / 60 + longitude_secondes / 3600);
     document.getElementById("latitude").value = Math.round(lat * 1e7) / 1e7;
     document.getElementById("longitude").value = lng;
+    document.getElementById("latlong").value = Math.round(lat * 1e7) / 1e7 + "," +lng;
     setTimeout(codeLatLngEmbedded(2), 1e3)
 }
 
 function ddversdms() {
-    var lat, lng, latdeg, latmin, latsec, lngdeg, lngmin, lngsec;
+    let lat, lng, latdeg, latmin, latsec, lngdeg, lngmin, lngsec;
     lat = parseFloat(document.getElementById("latitude").value) || 0;
     lng = parseFloat(document.getElementById("longitude").value) || 0;
     if (lat >= 0) document.getElementById("nord").checked = true;
@@ -445,8 +405,51 @@ function ddversdms() {
     document.getElementById("longitude_secondes").value = lngsec
 }
 
-function handleLocationError(browserHasGeolocation, infoWindowEmbedded, pos) {
-    infoWindowEmbedded.setPosition(pos);
+function embeddedGeocodeReverse(lat, long) {
+    let addressResult;
+    let latlng = {lat: parseFloat(lat), lng: parseFloat(long)};
+
+    // Get location
+    geocoder.geocode({'location': latlng}, 
+        function(results, status) {
+            if (status === 'OK') {
+                mapEmbedded.setCenter(latlng);
+                mapEmbedded.setZoom(17);
+
+                addressResult = results[0].formatted_address;
+                
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = long
+                document.getElementById("latlong").value = lat + "," +long;
+                document.getElementById("address").value = addressResult;
+            }
+        }
+    );
+
+    // Set marker and open markers
+    markerEmbedded = new google.maps.Marker({
+        position: new google.maps.LatLng(latlng),
+        animation: google.maps.Animation.DROP,
+        title: addressResult,
+        map: mapEmbedded
+    });
+
+    google.maps.event.addListener(markerEmbedded, 'click', function() {
+        // infowindow.setContent(results[0].formatted_address);
+        // infowindow.open(marker.get('map'), marker);             
+        infoWindowEmbedded.setPosition(latlng);
+        infoWindowEmbedded.setContent(addressResult);
+        infoWindowEmbedded.open(mapEmbedded);
+    });
+
+    // Fill other coordinates feild
+    setTimeout(()=>{
+        ddversdms();
+    }, loadingDelay);
+}
+
+function handleLocationError(browserHasGeolocation, infoWindowEmbedded, latlng){
+    infoWindowEmbedded.setPosition(latlng);
     infoWindowEmbedded.setContent(browserHasGeolocation ?
                           'Error: The Geolocation service failed.' :
                           'Error: Your browser doesn\'t support geolocation.');
