@@ -127,7 +127,38 @@
 ?>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <section id="Home">
-            <p>Nothing here yet!!</p>
+            <h2>Welcome to Geolocation Reversing Web Application!</h2>
+            <div>
+                <h3>How to navigate through the Web App?</h3>
+                <div>
+                    <h4>MySQL Database Page</h4>
+                    <p>The MySQL Database tab on the left will load all the data in the current MySQL Database. The MySQL Database page will look like the <i>Figure 1</i> below. </p>
+                    <figure>
+                        <img src="/shared/image/1.PNG" alt="MySQL Database">
+                        <figcaption>1. MySQL Database Page Navigation</figcaption>
+                    </figure>
+                    <p>Each row of the MySQL data table has three buttons, Reverse Geocode, Edit, and Delete. The Reverse Geocode button will reverse individual data geolocation on the embedded Google Maps below the table. The Edit button is used to edit any properties of the data excepts for the LAT, LONG, and Altitude since these datas are calcualted base on  Degree, Minutes, and Seconds from Latitude and Longitude. And of course, the Delete button will delete the current row in the table. Rest asure, there will be a delete comfimation prompt incase the Delete button is clicked accidently.</p>
+                    <p>Another three buttons are Refresh, Add a New Data, and Reverse All Data from MySQL. The refresh button will refresh the current Database in case there is some network lattency causing missing data on the table. The Add a new Data button will add a new data to the MySQL Database. The Reverse All Data from MySQL will reverse all geolocation data in the MySQL and display on the Google Map.</p>
+                    <p>Finally, the Upload and Replace Table will delete and upload the entire MySQL Database. However, to use this button, a file must be formatted in .csv format. Furthermore, the structure/column of .csv file has to match the MySQL Database column name. One important thing to note is that the process to clear and update the entire MySQL Database might take quite a bit of time due to network latency to the Web Server. The <i>Figure 2</i> shows the current column names in the MySQL Database. </p>
+                    <figure>
+                        <img src="/shared/image/2.PNG" alt="MySQL Database Column Names">
+                        <figcaption>2. MySQL Database Column Names</figcaption>
+                    </figure>
+                    <p>A sample geolocation data, which is called <a href="https://raw.githubusercontent.com/ngocdai94/geolocation/master/geo_data-6.csv">geo_data-6</a>, is prepared to test the web application. The file can be downloaded to a computer by right clicking to it and choose "Save link as..." Since this is a developer account, there is a free limit on how many requests to the Google Geolocation service per day. If the requests exceeds, the web app will not be able to request from Google services, or there will be a charge billed to the web app owner.</p>
+                </div>
+            </div>
+
+            <div>
+                <h4>DMS Geolocation</h4>
+                <p>The DMS Geolocation page is a tool to lookup any address from latitude and longitude decimal degree (DD) or degree, minutes, and seconds (DMS). The <i>Figure 3</i> shows how the page looks like.</p>
+                <figure>
+                    <img src="/shared/image/3.PNG" alt="MySQL Database Column Names">
+                    <figcaption>3. Geolocation Tool</figcaption>
+                </figure>
+                <p>At the first sight, the DMS Geolocation page shows some input fields and another embedded Google Maps, which will display the address location result from any clicked buttons from the left.</p>
+                <p>The Get Current GPS Coordinates will get the current GPS address from where it is requested from. The Get Address from DD will reverse geolocation from Latitude and Longitude input fields. The Address and Lat,Long text input field is grayed out since they are use to display text only. The Address text input field is under contruction on implementing the Autocomplete feature from the Google Maps API. When the contruction finishes, the Address input filed will be back to normal. Similar to the Get Address from DD button, the Get Address from DMS will reverse geolocation from DMS to actual location and display on the Google Maps on the right</p>
+                <p>These three buttons are hiddenly linked together. For example, when clicking to the Get Current GPS Coordinates, the web application will autofill DD (decimal degree) and DMS (degree, minutes, seconds) sections.</p>
+            </div>
         </section>
 
         <section id="MySQL_Database">
@@ -198,14 +229,14 @@
                             <h4>Address</h4>
                                 <div class="form-group">
                                     <div class="col-md-12 addressWrapper">
-                                        <input id="address" class="form-control" type="text" value="">
+                                        <input id="address" class="form-control" type="text" value="" disabled>
                                         <div id="resultsWrapper">
                                             <div id="results" class="mapSearchResults"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                     <button type="button" class="btn btn-primary" onclick="codeAddress()">Get Current GPS Coordinates</button>
                                     </div>
                                 </div>
@@ -225,19 +256,19 @@
                                     <div class="col-md-9">
                                         <input id="longitude" class="form-control" type="text">
                                     </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-md-4">
-                                        <button type="button" class="btn btn-primary" onclick="codeLatLngEmbedded()">Get
-                                            Address</button>
-                                    </div>
-                                </div>
+                                </div>                             
 
                                 <div class="form-group">
                                     <label class="col-md-3 control-label" for="longitude">Lat,Long</label>
                                     <div class="col-md-9">
-                                        <input id="latlong" class="form-control selectall" type="text">
+                                        <input id="latlong" class="form-control selectall" type="text" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-primary" onclick="codeLatLngEmbedded()">Get
+                                            Address from DD</button>
                                     </div>
                                 </div>
 
@@ -292,9 +323,9 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <button type="button" class="btn btn-primary" onclick="dmsversdd()">Get
-                                            Address</button>
+                                            Address from DMS</button>
                                     </div>
                                 </div>
                             </form>
