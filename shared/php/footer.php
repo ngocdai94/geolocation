@@ -19,6 +19,6 @@
     <script src="/shared/js/all.js"></script>
     <!-- <script src="/shared/js/googleGeolocation_Embedded.js"></script> -->
     <!-- <script src="<//?=$mysqlScript?>"></script> -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcHfA2WqTubyiS9ABL3Qi8y7xZkf3-s9c&libraries=places&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2-NR6Y59U6tmiYkpvSMcVyWF921FeT20&libraries=places&callback=initMap"></script>
 </body>
 </html>
